@@ -1,0 +1,82 @@
+<div class="contextual">
+</div>
+
+<h2><%= plural_name %></h2>
+
+<!-- TODO Filters-->
+
+<form action="/<%= plural_name %>" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=" /></div>	
+<input id="back_url" name="back_url" type="hidden" value="/projects/redmine/issues" />
+<div class="autoscroll">
+<table class="list issues">
+
+    <thead>
+      <tr>
+        <th>
+          <a href="/<%= plural_name %>" onclick="toggleIssuesSelection(Element.up(this, &quot;form&quot;)); return false;" title="Check all/Uncheck all"><img alt="Toggle_check" src="/images/toggle_check.png?1269784251" /></a>
+        </th>
+        <th title="Sort by &quot;#&quot;">
+          <a class="sort desc" href="/projects/redmine/issues?sort=id" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=id', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">#</a>
+        </th>
+        <% for attribute in attributes -%>
+        <th title="Sort by &quot;<%= attribute.column.human_name %>&quot;">
+          <%%= link_to_remote('<%=attribute.column.human_name%>',{
+              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>' : '<%=attribute.name%>_reverse' ), :page => nil})},
+              :update => 'content',
+      	:method => :get
+          },{
+            :title => "Sort by <%=attribute.column.human_name%>",
+            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>' : '<%=attribute.name%>_reverse' ), :page => nil}))
+          }) %>
+        </th>
+        <% end -%>
+      </tr>
+  </thead>
+  <tbody>
+    <%% @<%= plural_name %>.each do |<%= singular_name %>| %>
+      <tr id="<%% dom_id(<%=singular_name%>)%>" class="hascontextmenu <%%= cycle 'odd' , 'even' %>  issue ">
+        <td class="checkbox"><input name="ids[]" type="checkbox" value="5586" /></td>
+        <td><%%=link_to <%= singular_name %>.id, <%= singular_name %>%></td>
+    <% for attribute in attributes -%>
+        <td class="<%= attribute.name %>"><%%=h <%= singular_name %>.<%= attribute.name %> %></td>
+    <% end -%>
+      </tr>
+    <%% end %>
+    
+    <!-- <tr id="issue-5586" class="hascontextmenu odd issue status-1 priority-2 ">
+          <td class="checkbox"><input name="ids[]" type="checkbox" value="5586" /></td>
+          <td><a href="/issues/5586">5586</a></td>
+          <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5586">Closing when marked as duplicate (also: closing model in general)</a></td><td class="updated_on">2010-05-24 23:46</td><td class="category"></td>
+        </tr> -->
+  </tbody>
+</table>
+</div>
+</form>
+<p class="pagination">1 <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">2</a> <a href="/projects/redmine/issues?page=3" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=3', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">3</a>  ... <a href="/projects/redmine/issues?page=85" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=85', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">85</a> <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Next &#187;</a> (1-25/2120)</p>
+
+
+<p class="other-formats">Also available in:
+	<span><a href="/projects/redmine/issues.atom" class="atom" rel="nofollow">Atom</a></span>
+	<span><a href="/projects/redmine/issues.csv" class="csv" rel="nofollow">CSV</a></span>
+	<span><a href="/projects/redmine/issues.pdf" class="pdf" rel="nofollow">PDF</a></span>
+</p>
+
+
+
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+new ContextMenu('/issues/context_menu')
+//]]>
+</script>
+
+        
+				<div style="clear:both;"></div>
+    </div>
+    
+<%% content_for :sidebar do %>
+  <%%= link_to 'New <%= singular_name %>', new_<%= singular_name %>_path %>
+<%% end %>
