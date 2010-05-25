@@ -1,0 +1,1091 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Inspire Synergy - Issues</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker,project,management" />
+<link href="/stylesheets/application.css?1268079058" media="all" rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.2/effects.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.2/dragdrop.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.2/controls.js" type="text/javascript"></script>
+
+<script src="/javascripts/application.js?1269784251" type="text/javascript"></script>
+<link href="/stylesheets/jstoolbar.css?1222021454" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1207248491);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+<script src="/javascripts/select_list_move.js?1264853164" type="text/javascript"></script>
+
+    <!-- <link href="http://www.redmine.org/issues.atom?query_id=" rel="alternate" title="Issues" type="application/atom+xml" />
+    <link href="http://www.redmine.org/issues/changes?format=atom&amp;query_id=" rel="alternate" title="Details of all changes" type="application/atom+xml" /> -->
+<script src="/javascripts/context_menu.js" type="text/javascript"></script><link href="/stylesheets/context_menu.css?1269784251" media="screen" rel="stylesheet" type="text/css" /></head>
+<body>
+
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="/login" class="login">Sign in</a></li>
+<li><a href="/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="/" class="home">Home</a></li>
+<li><a href="/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="/search/index/redmine" method="get">
+        <input name="issues" type="hidden" value="1" />
+        <a href="/search/index/redmine" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>Inspire Synergy Limited</h1>
+
+    
+    
+    <div id="main-menu">
+        <ul>
+          <li><a href="/" class="overview">Overview</a></li>
+          <li><a href="/issues" class="overview">Issues</a></li>
+<!-- <li><a href="/wiki/redmine/Download" class="download">Download</a></li>
+<li><a href="/projects/redmine/activity" class="activity">Activity</a></li>
+<li><a href="/projects/redmine/roadmap" class="roadmap">Roadmap</a></li>
+<li><a href="/projects/redmine/issues" class="issues selected">Issues</a></li>
+<li><a href="/projects/redmine/news" class="news">News</a></li>
+<li><a href="/projects/redmine/wiki" class="wiki">Wiki</a></li>
+
+<li><a href="/projects/redmine/boards" class="boards">Forums</a></li>
+<li><a href="/projects/redmine/repository" class="repository">Repository</a></li> -->
+</ul>
+    </div>
+    
+</div>
+
+<div class="" id="main">
+    <div id="sidebar">        
+        
+    <h3>Issues</h3>
+<a href="/projects/redmine/issues?set_filter=1">View all issues</a><br />
+
+<a href="/projects/redmine/issues/report">Summary</a><br />
+
+
+
+
+
+
+
+<h3>Custom queries</h3>
+
+<a href="/projects/redmine/issues?query_id=84">Documentation issues</a><br />
+<a href="/projects/redmine/issues?query_id=1">Open defects</a><br />
+<a href="/projects/redmine/issues?query_id=2">Open features</a><br />
+
+<a href="/projects/redmine/issues?query_id=42">Plugin issues</a><br />
+<a href="/projects/redmine/issues?query_id=7">Translation patches</a><br />
+
+        
+    </div>
+    
+    <div id="content">
+				
+
+        <div class="contextual">
+
+</div>
+
+<h2>Issues</h2>
+
+
+<form action="/queries/new" id="query_form" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=" /></div>
+    <input id="project_id" name="project_id" type="hidden" value="redmine" />
+		<div id="query_form_content">
+    <fieldset id="filters" class="collapsible ">
+    	<legend onclick="toggleFieldset(this);">Filters</legend>
+    	<div style="">
+    		<script type="text/javascript">
+//<![CDATA[
+function add_filter() {
+    select = $('add_filter_select');
+    field = select.value
+    Element.show('tr_' +  field);
+    check_box = $('cb_' + field);
+    check_box.checked = true;
+    toggle_filter(field);
+    select.selectedIndex = 0;
+    
+    for (i=0; i<select.options.length; i++) {
+        if (select.options[i].value == field) {
+            select.options[i].disabled = true;
+        }    
+    }
+}
+
+function toggle_filter(field) {
+    check_box = $('cb_' + field);
+    
+    if (check_box.checked) {
+        Element.show("operators_" + field);
+        toggle_operator(field);
+    } else {
+        Element.hide("operators_" + field);
+        Element.hide("div_values_" + field);
+  }
+}
+
+function toggle_operator(field) {
+  operator = $("operators_" + field);
+  switch (operator.value) {
+    case "!*":
+    case "*":
+    case "t":
+    case "w":
+    case "o":
+    case "c":
+      Element.hide("div_values_" + field);
+      break;
+    default:
+      Element.show("div_values_" + field);
+      break;
+  }
+}
+
+function toggle_multi_select(field) {
+    select = $('values_' + field);
+    if (select.multiple == true) {
+        select.multiple = false;
+    } else {
+        select.multiple = true;
+    }
+}
+//]]>
+</script>
+
+<table width="100%">
+<tr>
+<td>
+<table>
+
+    
+    <tr  id="tr_status_id" class="filter">
+    <td style="width:200px;">
+        <input checked="checked" id="cb_status_id" name="fields[]" onclick="toggle_filter('status_id');" type="checkbox" value="status_id" />
+        <label for="cb_status_id">Status</label>
+    </td>
+
+    <td style="width:150px;">
+        <select class="select-small" id="operators_status_id" name="operators[status_id]" onchange="toggle_operator('status_id');" style="vertical-align: top;"><option value="o" selected="selected">open</option>
+<option value="=">is</option>
+<option value="!">is not</option>
+<option value="c">closed</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_status_id" style="display:none;">
+
+    
+        <select  name="values[status_id][]" id="values_status_id" class="select-small" style="vertical-align: top;">
+        <option value="1">New</option>
+<option value="7">Assigned</option>
+<option value="3">Resolved</option>
+<option value="5">Closed</option>
+<option value="8">Reopened</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('status_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+
+    <script type="text/javascript">toggle_filter('status_id');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_tracker_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_tracker_id" name="fields[]" onclick="toggle_filter('tracker_id');" type="checkbox" value="tracker_id" />
+        <label for="cb_tracker_id">Tracker</label>
+
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_tracker_id" name="operators[tracker_id]" onchange="toggle_operator('tracker_id');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option></select>
+    </td>
+    <td>    
+    <div id="div_values_tracker_id" style="display:none;">
+    
+        <select  name="values[tracker_id][]" id="values_tracker_id" class="select-small" style="vertical-align: top;">
+        <option value="1">Defect</option>
+
+<option value="2">Feature</option>
+<option value="3">Patch</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('tracker_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('tracker_id');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_priority_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_priority_id" name="fields[]" onclick="toggle_filter('priority_id');" type="checkbox" value="priority_id" />
+        <label for="cb_priority_id">Priority</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_priority_id" name="operators[priority_id]" onchange="toggle_operator('priority_id');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option></select>
+
+    </td>
+    <td>    
+    <div id="div_values_priority_id" style="display:none;">
+    
+        <select  name="values[priority_id][]" id="values_priority_id" class="select-small" style="vertical-align: top;">
+        <option value="3">Low</option>
+<option value="4">Normal</option>
+<option value="5">High</option>
+<option value="6">Urgent</option>        
+        </select>
+
+        <a href="#" onclick="toggle_multi_select('priority_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('priority_id');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_assigned_to_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_assigned_to_id" name="fields[]" onclick="toggle_filter('assigned_to_id');" type="checkbox" value="assigned_to_id" />
+
+        <label for="cb_assigned_to_id">Assigned to</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_assigned_to_id" name="operators[assigned_to_id]" onchange="toggle_operator('assigned_to_id');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+
+    <td>    
+    <div id="div_values_assigned_to_id" style="display:none;">
+    
+        <select  name="values[assigned_to_id][]" id="values_assigned_to_id" class="select-small" style="vertical-align: top;">
+        <option value="1592">Azamat Hackimov</option>
+<option value="460">Chaoqun Zou</option>
+<option value="12745">Christian Bradley</option>
+<option value="5">Eric Davis</option>
+<option value="3866">Felix Schäfer</option>
+<option value="1188">Jean-Baptiste Barth</option>
+
+<option value="1">Jean-Philippe Lang</option>
+<option value="551">Jim Mulholland</option>
+<option value="2203">Karl Heinz Marbaise</option>
+<option value="283">Martin Herr</option>
+<option value="574">Maxim Krušina</option>
+<option value="1565">Mischa The Evil</option>
+<option value="3103">Muntek Singh</option>
+<option value="3">Nicolas Chuche</option>
+<option value="809">Paul Rivier</option>
+
+<option value="1049">Russell Hind</option>
+<option value="679">Shane Pearlman</option>
+<option value="2">Thomas Lecavelier</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('assigned_to_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('assigned_to_id');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_author_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_author_id" name="fields[]" onclick="toggle_filter('author_id');" type="checkbox" value="author_id" />
+        <label for="cb_author_id">Author</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_author_id" name="operators[author_id]" onchange="toggle_operator('author_id');" style="vertical-align: top;"><option value="=">is</option>
+
+<option value="!">is not</option></select>
+    </td>
+    <td>    
+    <div id="div_values_author_id" style="display:none;">
+    
+        <select  name="values[author_id][]" id="values_author_id" class="select-small" style="vertical-align: top;">
+        <option value="1592">Azamat Hackimov</option>
+<option value="460">Chaoqun Zou</option>
+<option value="12745">Christian Bradley</option>
+<option value="5">Eric Davis</option>
+
+<option value="3866">Felix Schäfer</option>
+<option value="1188">Jean-Baptiste Barth</option>
+<option value="1">Jean-Philippe Lang</option>
+<option value="551">Jim Mulholland</option>
+<option value="2203">Karl Heinz Marbaise</option>
+<option value="283">Martin Herr</option>
+<option value="574">Maxim Krušina</option>
+<option value="1565">Mischa The Evil</option>
+<option value="3103">Muntek Singh</option>
+
+<option value="3">Nicolas Chuche</option>
+<option value="809">Paul Rivier</option>
+<option value="1049">Russell Hind</option>
+<option value="679">Shane Pearlman</option>
+<option value="2">Thomas Lecavelier</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('author_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('author_id');</script>
+
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_category_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_category_id" name="fields[]" onclick="toggle_filter('category_id');" type="checkbox" value="category_id" />
+        <label for="cb_category_id">Category</label>
+    </td>
+    <td style="width:150px;">
+
+        <select class="select-small" id="operators_category_id" name="operators[category_id]" onchange="toggle_operator('category_id');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_category_id" style="display:none;">
+    
+        <select  name="values[category_id][]" id="values_category_id" class="select-small" style="vertical-align: top;">
+        <option value="7">Accounts</option>
+
+<option value="8">Administration</option>
+<option value="19">Attachments</option>
+<option value="30">Code Cleanup</option>
+<option value="14">Custom fields</option>
+<option value="21">Database</option>
+<option value="24">Documentation</option>
+<option value="4">Documents</option>
+<option value="9">Email notifications</option>
+<option value="29">Email receiving</option>
+
+<option value="18">Feeds</option>
+<option value="5">Forums</option>
+<option value="27">Groups</option>
+<option value="15">Importers</option>
+<option value="2">Issues</option>
+<option value="23">Issues permissions</option>
+<option value="28">LDAP</option>
+<option value="6">News</option>
+<option value="17">Permissions</option>
+
+<option value="31">Plugin Request</option>
+<option value="20">Plugins</option>
+<option value="11">Projects</option>
+<option value="32">REST API</option>
+<option value="22">Roadmap</option>
+<option value="33">Ruby 1.9 support</option>
+<option value="3">SCM</option>
+<option value="16">Search engine</option>
+<option value="26">Text formatting</option>
+
+<option value="13">Time tracking</option>
+<option value="12">Translations</option>
+<option value="10">UI</option>
+<option value="25">Website (redmine.org)</option>
+<option value="1">Wiki</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('category_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('category_id');</script>
+
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_fixed_version_id" class="filter">
+    <td style="width:200px;">
+        <input id="cb_fixed_version_id" name="fields[]" onclick="toggle_filter('fixed_version_id');" type="checkbox" value="fixed_version_id" />
+        <label for="cb_fixed_version_id">Target version</label>
+    </td>
+    <td style="width:150px;">
+
+        <select class="select-small" id="operators_fixed_version_id" name="operators[fixed_version_id]" onchange="toggle_operator('fixed_version_id');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_fixed_version_id" style="display:none;">
+    
+        <select  name="values[fixed_version_id][]" id="values_fixed_version_id" class="select-small" style="vertical-align: top;">
+        <option value="1">Redmine - 0.7</option>
+
+<option value="3">Redmine - 0.7.1</option>
+<option value="4">Redmine - 0.7.2</option>
+<option value="5">Redmine - 0.7.3</option>
+<option value="2">Redmine - 0.8</option>
+<option value="7">Redmine - 0.8.1</option>
+<option value="8">Redmine - 0.8.2</option>
+<option value="9">Redmine - 0.8.3</option>
+<option value="10">Redmine - 0.8.4</option>
+<option value="11">Redmine - 0.8.5</option>
+
+<option value="12">Redmine - 0.8.6</option>
+<option value="13">Redmine - 0.8.7</option>
+<option value="6">Redmine - 0.9.0</option>
+<option value="15">Redmine - 0.9.1</option>
+<option value="16">Redmine - 0.9.2</option>
+<option value="17">Redmine - 0.9.3</option>
+<option value="18">Redmine - 0.9.4</option>
+<option value="19">Redmine - 0.9.5</option>
+<option value="14">Redmine - 1.0.0 (RC)</option>
+
+<option value="20">Redmine - 1.1</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('fixed_version_id');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('fixed_version_id');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_subject" class="filter">
+
+    <td style="width:200px;">
+        <input id="cb_subject" name="fields[]" onclick="toggle_filter('subject');" type="checkbox" value="subject" />
+        <label for="cb_subject">Subject</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_subject" name="operators[subject]" onchange="toggle_operator('subject');" style="vertical-align: top;"><option value="~">contains</option>
+<option value="!~">doesn't contain</option></select>
+    </td>
+
+    <td>    
+    <div id="div_values_subject" style="display:none;">
+    
+        <input class="select-small" id="values_subject" name="values[subject][]" size="30" type="text" />
+    
+    </div>
+    <script type="text/javascript">toggle_filter('subject');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_created_on" class="filter">
+
+    <td style="width:200px;">
+        <input id="cb_created_on" name="fields[]" onclick="toggle_filter('created_on');" type="checkbox" value="created_on" />
+        <label for="cb_created_on">Created</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_created_on" name="operators[created_on]" onchange="toggle_operator('created_on');" style="vertical-align: top;"><option value="&gt;t-">less than days ago</option>
+<option value="&lt;t-">more than days ago</option>
+<option value="t-">days ago</option>
+
+<option value="t">today</option>
+<option value="w">this week</option></select>
+    </td>
+    <td>    
+    <div id="div_values_created_on" style="display:none;">
+    
+        <input class="select-small" id="values_created_on" name="values[created_on][]" size="3" type="text" /> days
+    
+    </div>
+    <script type="text/javascript">toggle_filter('created_on');</script>
+    </td>
+
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_updated_on" class="filter">
+    <td style="width:200px;">
+        <input id="cb_updated_on" name="fields[]" onclick="toggle_filter('updated_on');" type="checkbox" value="updated_on" />
+        <label for="cb_updated_on">Updated</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_updated_on" name="operators[updated_on]" onchange="toggle_operator('updated_on');" style="vertical-align: top;"><option value="&gt;t-">less than days ago</option>
+
+<option value="&lt;t-">more than days ago</option>
+<option value="t-">days ago</option>
+<option value="t">today</option>
+<option value="w">this week</option></select>
+    </td>
+    <td>    
+    <div id="div_values_updated_on" style="display:none;">
+    
+        <input class="select-small" id="values_updated_on" name="values[updated_on][]" size="3" type="text" /> days
+    
+    </div>
+
+    <script type="text/javascript">toggle_filter('updated_on');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_start_date" class="filter">
+    <td style="width:200px;">
+        <input id="cb_start_date" name="fields[]" onclick="toggle_filter('start_date');" type="checkbox" value="start_date" />
+        <label for="cb_start_date">Start</label>
+
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_start_date" name="operators[start_date]" onchange="toggle_operator('start_date');" style="vertical-align: top;"><option value="&lt;t+">in less than</option>
+<option value="&gt;t+">in more than</option>
+<option value="t+">in</option>
+<option value="t">today</option>
+<option value="w">this week</option>
+<option value="&gt;t-">less than days ago</option>
+
+<option value="&lt;t-">more than days ago</option>
+<option value="t-">days ago</option></select>
+    </td>
+    <td>    
+    <div id="div_values_start_date" style="display:none;">
+    
+        <input class="select-small" id="values_start_date" name="values[start_date][]" size="3" type="text" /> days
+    
+    </div>
+    <script type="text/javascript">toggle_filter('start_date');</script>
+    </td>
+
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_due_date" class="filter">
+    <td style="width:200px;">
+        <input id="cb_due_date" name="fields[]" onclick="toggle_filter('due_date');" type="checkbox" value="due_date" />
+        <label for="cb_due_date">Due date</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_due_date" name="operators[due_date]" onchange="toggle_operator('due_date');" style="vertical-align: top;"><option value="&lt;t+">in less than</option>
+
+<option value="&gt;t+">in more than</option>
+<option value="t+">in</option>
+<option value="t">today</option>
+<option value="w">this week</option>
+<option value="&gt;t-">less than days ago</option>
+<option value="&lt;t-">more than days ago</option>
+<option value="t-">days ago</option></select>
+    </td>
+    <td>    
+    <div id="div_values_due_date" style="display:none;">
+
+    
+        <input class="select-small" id="values_due_date" name="values[due_date][]" size="3" type="text" /> days
+    
+    </div>
+    <script type="text/javascript">toggle_filter('due_date');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_estimated_hours" class="filter">
+    <td style="width:200px;">
+        <input id="cb_estimated_hours" name="fields[]" onclick="toggle_filter('estimated_hours');" type="checkbox" value="estimated_hours" />
+
+        <label for="cb_estimated_hours">Estimated time</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_estimated_hours" name="operators[estimated_hours]" onchange="toggle_operator('estimated_hours');" style="vertical-align: top;"><option value="=">is</option>
+<option value="&gt;=">&gt;=</option>
+<option value="&lt;=">&lt;=</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+
+    </td>
+    <td>    
+    <div id="div_values_estimated_hours" style="display:none;">
+    
+        <input class="select-small" id="values_estimated_hours" name="values[estimated_hours][]" size="3" type="text" />
+    
+    </div>
+    <script type="text/javascript">toggle_filter('estimated_hours');</script>
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_done_ratio" class="filter">
+    <td style="width:200px;">
+        <input id="cb_done_ratio" name="fields[]" onclick="toggle_filter('done_ratio');" type="checkbox" value="done_ratio" />
+        <label for="cb_done_ratio">% Done</label>
+    </td>
+    <td style="width:150px;">
+        <select class="select-small" id="operators_done_ratio" name="operators[done_ratio]" onchange="toggle_operator('done_ratio');" style="vertical-align: top;"><option value="=">is</option>
+<option value="&gt;=">&gt;=</option>
+
+<option value="&lt;=">&lt;=</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_done_ratio" style="display:none;">
+    
+        <input class="select-small" id="values_done_ratio" name="values[done_ratio][]" size="3" type="text" />
+    
+    </div>
+    <script type="text/javascript">toggle_filter('done_ratio');</script>
+
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_cf_2" class="filter">
+    <td style="width:200px;">
+        <input id="cb_cf_2" name="fields[]" onclick="toggle_filter('cf_2');" type="checkbox" value="cf_2" />
+        <label for="cb_cf_2">Resolution</label>
+    </td>
+    <td style="width:150px;">
+
+        <select class="select-small" id="operators_cf_2" name="operators[cf_2]" onchange="toggle_operator('cf_2');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_cf_2" style="display:none;">
+    
+        <select  name="values[cf_2][]" id="values_cf_2" class="select-small" style="vertical-align: top;">
+        <option value="Fixed">Fixed</option>
+
+<option value="Wont fix">Wont fix</option>
+<option value="Invalid">Invalid</option>
+<option value="Duplicate">Duplicate</option>
+<option value="Cant reproduce">Cant reproduce</option>
+<option value="No feedback">No feedback</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('cf_2');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+    
+    </div>
+    <script type="text/javascript">toggle_filter('cf_2');</script>
+
+    </td>
+    </tr>
+
+    
+    <tr style="display:none;" id="tr_cf_1" class="filter">
+    <td style="width:200px;">
+        <input id="cb_cf_1" name="fields[]" onclick="toggle_filter('cf_1');" type="checkbox" value="cf_1" />
+        <label for="cb_cf_1">Affected version</label>
+    </td>
+    <td style="width:150px;">
+
+        <select class="select-small" id="operators_cf_1" name="operators[cf_1]" onchange="toggle_operator('cf_1');" style="vertical-align: top;"><option value="=">is</option>
+<option value="!">is not</option>
+<option value="!*">none</option>
+<option value="*">all</option></select>
+    </td>
+    <td>    
+    <div id="div_values_cf_1" style="display:none;">
+    
+        <select  name="values[cf_1][]" id="values_cf_1" class="select-small" style="vertical-align: top;">
+        <option value="0.5.x">0.5.x</option>
+
+<option value="0.6.0">0.6.0</option>
+<option value="0.6.1">0.6.1</option>
+<option value="0.6.2">0.6.2</option>
+<option value="0.6.3">0.6.3</option>
+<option value="0.6.4">0.6.4</option>
+<option value="0.7.0-RC1">0.7.0-RC1</option>
+<option value="0.7.0">0.7.0</option>
+<option value="0.7.1">0.7.1</option>
+<option value="0.7.2">0.7.2</option>
+
+<option value="0.7.3">0.7.3</option>
+<option value="0.8.0-RC1">0.8.0-RC1</option>
+<option value="0.8.0">0.8.0</option>
+<option value="0.8.1">0.8.1</option>
+<option value="0.8.2">0.8.2</option>
+<option value="0.8.3">0.8.3</option>
+<option value="0.8.4">0.8.4</option>
+<option value="0.8.5">0.8.5</option>
+<option value="0.8.6">0.8.6</option>
+
+<option value="0.8.7">0.8.7</option>
+<option value="0.9.0">0.9.0</option>
+<option value="0.9.1">0.9.1</option>
+<option value="0.9.2">0.9.2</option>
+<option value="0.9.3">0.9.3</option>
+<option value="0.9.4">0.9.4</option>
+<option value="devel">devel</option>        
+        </select>
+        <a href="#" onclick="toggle_multi_select('cf_1');; return false;" style="vertical-align: bottom;"><img alt="Bullet_toggle_plus" src="/images/bullet_toggle_plus.png?1269784251" /></a>
+
+    
+    </div>
+    <script type="text/javascript">toggle_filter('cf_1');</script>
+    </td>
+    </tr>
+
+</table>
+</td>
+<td class="add-filter">
+Add filter:
+<select class="select-small" id="add_filter_select" onchange="add_filter();"><option value=""></option>
+<option value="tracker_id">Tracker</option>
+
+<option value="priority_id">Priority</option>
+<option value="assigned_to_id">Assigned to</option>
+<option value="author_id">Author</option>
+<option value="category_id">Category</option>
+<option value="fixed_version_id">Target version</option>
+<option value="subject">Subject</option>
+<option value="created_on">Created</option>
+<option value="updated_on">Updated</option>
+<option value="start_date">Start</option>
+
+<option value="due_date">Due date</option>
+<option value="estimated_hours">Estimated time</option>
+<option value="done_ratio">% Done</option>
+<option value="cf_2">Resolution</option>
+<option value="cf_1">Affected version</option></select>
+</td>
+</tr>
+</table>
+
+    	</div>
+    </fieldset>
+
+    <fieldset class="collapsible collapsed">
+    	<legend onclick="toggleFieldset(this);">Options</legend>
+    	<div style="display: none;">
+    		<table>
+    			<tr>
+    				<td>Columns</td>
+						<td><table style="border-collapse: collapse; border:0;">
+	<tr>
+
+		<td style="padding-left:0"><select id="available_columns" multiple="multiple" name="available_columns[]" size="10" style="width:150px"><option value="project">Project</option>
+<option value="parent">Parent task</option>
+<option value="author">Author</option>
+<option value="assigned_to">Assigned to</option>
+<option value="fixed_version">Target version</option>
+<option value="start_date">Start</option>
+<option value="due_date">Due date</option>
+<option value="estimated_hours">Estimated time</option>
+
+<option value="done_ratio">% Done</option>
+<option value="created_on">Created</option>
+<option value="cf_1">Affected version</option>
+<option value="cf_2">Resolution</option></select>
+		</td>
+		<td align="center" valign="middle">
+			<input type="button" value="&#8594;"
+			 onclick="moveOptions(this.form.available_columns, this.form.selected_columns);" /><br />
+			<input type="button" value="&#8592;"
+			 onclick="moveOptions(this.form.selected_columns, this.form.available_columns);" />
+		</td>
+
+		<td><select id="selected_columns" multiple="multiple" name="query[column_names][]" size="10" style="width:150px"><option value="tracker">Tracker</option>
+<option value="status">Status</option>
+<option value="priority">Priority</option>
+<option value="subject">Subject</option>
+<option value="updated_on">Updated</option>
+<option value="category">Category</option></select>
+		</td>
+		<td align="center" valign="middle">
+
+			<input type="button" value="&#8593;" onclick="moveOptionUp(this.form.selected_columns);" /><br />
+			<input type="button" value="&#8595;" onclick="moveOptionDown(this.form.selected_columns);" />
+		</td>
+	</tr>
+</table>
+
+
+</td>
+					</tr>
+					<tr>
+						<td>Group results by</td>
+
+						<td><select id="group_by" name="group_by"><option value="" selected="selected"></option>
+<option value="project">Project</option>
+<option value="tracker">Tracker</option>
+<option value="status">Status</option>
+<option value="priority">Priority</option>
+<option value="assigned_to">Assigned to</option>
+<option value="category">Category</option>
+<option value="fixed_version">Target version</option>
+<option value="done_ratio">% Done</option>
+
+<option value="cf_1">Affected version</option>
+<option value="cf_2">Resolution</option></select></td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+		</div>
+    <p class="buttons">
+
+    <a class="icon icon-checked" href="#" onclick="selectAllOptions(&quot;selected_columns&quot;);; new Ajax.Updater('content', '/issues?set_filter=1', {asynchronous:true, evalScripts:true, parameters:Form.serialize('query_form') + '&amp;authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Apply</a>
+                       
+    <a class="icon icon-reload" href="#" onclick="new Ajax.Updater('content', '/projects/redmine/issues?set_filter=1', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Clear</a>
+                       
+    
+    </p>
+</form>
+
+
+
+
+<form action="/issues" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=" /></div>	
+<input id="back_url" name="back_url" type="hidden" value="/projects/redmine/issues" />
+<div class="autoscroll">
+<table class="list issues">
+
+    <thead><tr>
+        <th><a href="/issues" onclick="toggleIssuesSelection(Element.up(this, &quot;form&quot;)); return false;" title="Check all/Uncheck all"><img alt="Toggle_check" src="/images/toggle_check.png?1269784251" /></a>
+        </th>
+		<th title="Sort by &quot;#&quot;"><a class="sort desc" href="/projects/redmine/issues?sort=id" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=id', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">#</a></th>
+        
+          <th title="Sort by &quot;Tracker&quot;"><a href="/projects/redmine/issues?sort=tracker%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=tracker%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Tracker</a></th>
+        
+          <th title="Sort by &quot;Status&quot;"><a href="/projects/redmine/issues?sort=status%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=status%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Status</a></th>
+        
+          <th title="Sort by &quot;Priority&quot;"><a href="/projects/redmine/issues?sort=priority%3Adesc%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=priority%3Adesc%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Priority</a></th>
+
+        
+          <th title="Sort by &quot;Subject&quot;"><a href="/projects/redmine/issues?sort=subject%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=subject%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Subject</a></th>
+        
+          <th title="Sort by &quot;Updated&quot;"><a href="/projects/redmine/issues?sort=updated_on%3Adesc%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=updated_on%3Adesc%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Updated</a></th>
+        
+          <th title="Sort by &quot;Category&quot;"><a href="/projects/redmine/issues?sort=category%2Cid%3Adesc" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=category%2Cid%3Adesc', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Category</a></th>
+        
+	</tr></thead>
+	
+	<tbody>
+	  
+	<tr id="issue-5586" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5586" /></td>
+
+		<td><a href="/issues/5586">5586</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5586">Closing when marked as duplicate (also: closing model in general)</a></td><td class="updated_on">2010-05-24 23:46</td><td class="category"></td>
+	</tr>
+	  
+	<tr id="issue-5577" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5577" /></td>
+		<td><a href="/issues/5577">5577</a></td>
+
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5577">Add Watcher based on issue category</a></td><td class="updated_on">2010-05-23 21:22</td><td class="category">Issues</td>
+	</tr>
+	  
+	<tr id="issue-5576" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5576" /></td>
+		<td><a href="/issues/5576">5576</a></td>
+
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5576">Have Category searches work for subprojects</a></td><td class="updated_on">2010-05-23 21:13</td><td class="category">Projects</td>
+	</tr>
+	  
+	<tr id="issue-5574" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5574" /></td>
+		<td><a href="/issues/5574">5574</a></td>
+
+        <td class="tracker">Patch</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5574">some rtl fixes</a></td><td class="updated_on">2010-05-23 09:11</td><td class="category"></td>
+	</tr>
+	  
+	<tr id="issue-5573" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5573" /></td>
+		<td><a href="/issues/5573">5573</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5573">Allow issue assignment in email</a></td><td class="updated_on">2010-05-21 22:35</td><td class="category">Email receiving</td>
+
+	</tr>
+	  
+	<tr id="issue-5572" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5572" /></td>
+		<td><a href="/issues/5572">5572</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5572">Build search queries in the address bar</a></td><td class="updated_on">2010-05-21 22:31</td><td class="category">Search engine</td>
+
+	</tr>
+	  
+	<tr id="issue-5571" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5571" /></td>
+		<td><a href="/issues/5571">5571</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5571">A new redmine link to include issue title</a></td><td class="updated_on">2010-05-21 17:13</td><td class="category">Wiki</td>
+
+	</tr>
+	  
+	<tr id="issue-5570" class="hascontextmenu even issue status-1 priority-2 overdue ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5570" /></td>
+		<td><a href="/issues/5570">5570</a></td>
+        <td class="tracker">Patch</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5570">swedishSwedish Translation for r3733</a></td><td class="updated_on">2010-05-21 15:34</td><td class="category">Translations</td>
+
+	</tr>
+	  
+	<tr id="issue-5569" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5569" /></td>
+		<td><a href="/issues/5569">5569</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5569">Drop down list for related version does not show up in sub-projects</a></td><td class="updated_on">2010-05-21 13:59</td><td class="category">Issues</td>
+
+	</tr>
+	  
+	<tr id="issue-5565" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5565" /></td>
+		<td><a href="/issues/5565">5565</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5565">Email receiving crashes on some emails</a></td><td class="updated_on">2010-05-20 20:38</td><td class="category">Email receiving</td>
+
+	</tr>
+	  
+	<tr id="issue-5564" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5564" /></td>
+		<td><a href="/issues/5564">5564</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5564">When (bulk/singe) updating issues, don't show statuses not available</a></td><td class="updated_on">2010-05-21 11:27</td><td class="category">Issues</td>
+
+	</tr>
+	  
+	<tr id="issue-5563" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5563" /></td>
+		<td><a href="/issues/5563">5563</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5563">provide more information about &quot;target version&quot;</a></td><td class="updated_on">2010-05-20 16:58</td><td class="category"></td>
+
+	</tr>
+	  
+	<tr id="issue-5561" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5561" /></td>
+		<td><a href="/issues/5561">5561</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5561">Auto add assign person to watch list</a></td><td class="updated_on">2010-05-19 22:50</td><td class="category">Issues</td>
+
+	</tr>
+	  
+	<tr id="issue-5560" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5560" /></td>
+		<td><a href="/issues/5560">5560</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5560">Changing System Time Zone Causes Issue Updates to Change Order</a></td><td class="updated_on">2010-05-19 21:32</td><td class="category"></td>
+	</tr>
+
+	  
+	<tr id="issue-5558" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5558" /></td>
+		<td><a href="/issues/5558">5558</a></td>
+        <td class="tracker">Patch</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5558">Missing strings for German translation</a></td><td class="updated_on">2010-05-19 17:15</td><td class="category">Translations</td>
+	</tr>
+
+	  
+	<tr id="issue-5557" class="hascontextmenu even issue status-1 priority-1 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5557" /></td>
+		<td><a href="/issues/5557">5557</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Low</td><td class="subject"><a href="/issues/5557">Show description of files in files tab</a></td><td class="updated_on">2010-05-20 09:39</td><td class="category">UI</td>
+	</tr>
+
+	  
+	<tr id="issue-5556" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5556" /></td>
+		<td><a href="/issues/5556">5556</a></td>
+        <td class="tracker">Patch</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5556">Display more projects in project jump box</a></td><td class="updated_on">2010-05-21 11:33</td><td class="category">UI</td>
+	</tr>
+
+	  
+	<tr id="issue-5555" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5555" /></td>
+		<td><a href="/issues/5555">5555</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5555">Bulk edit custom fields with different values in a tabular way from issue list</a></td><td class="updated_on">2010-05-19 15:42</td><td class="category">Issues</td>
+	</tr>
+
+	  
+	<tr id="issue-5554" class="hascontextmenu odd issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5554" /></td>
+		<td><a href="/issues/5554">5554</a></td>
+        <td class="tracker">Patch</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5554">Make links to various redmine objects more consistent</a></td><td class="updated_on">2010-05-19 14:56</td><td class="category">Code Cleanup</td>
+	</tr>
+
+	  
+	<tr id="issue-5553" class="hascontextmenu even issue status-1 priority-2 ">
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5553" /></td>
+		<td><a href="/issues/5553">5553</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5553">Force closing message</a></td><td class="updated_on">2010-05-19 20:08</td><td class="category"></td>
+	</tr>
+	  
+	<tr id="issue-5552" class="hascontextmenu odd issue status-1 priority-2 ">
+
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5552" /></td>
+		<td><a href="/issues/5552">5552</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5552">special type of list for custom field - users</a></td><td class="updated_on">2010-05-19 05:00</td><td class="category">Custom fields</td>
+	</tr>
+	  
+	<tr id="issue-5551" class="hascontextmenu even issue status-1 priority-2 ">
+
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5551" /></td>
+		<td><a href="/issues/5551">5551</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5551">Unable to edit issue - Description field is blank and not written to database on submit</a></td><td class="updated_on">2010-05-18 21:46</td><td class="category">Issues</td>
+	</tr>
+	  
+	<tr id="issue-5548" class="hascontextmenu odd issue status-1 priority-2 ">
+
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5548" /></td>
+		<td><a href="/issues/5548">5548</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5548">SVN Repository: Can not list content of a folder which includes square brackets.</a></td><td class="updated_on">2010-05-18 15:49</td><td class="category">SCM</td>
+	</tr>
+	  
+	<tr id="issue-5547" class="hascontextmenu even issue status-1 priority-2 ">
+
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5547" /></td>
+		<td><a href="/issues/5547">5547</a></td>
+        <td class="tracker">Feature</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5547">Add class of controller+view (home_welcome) to body of page</a></td><td class="updated_on">2010-05-18 14:24</td><td class="category">UI</td>
+	</tr>
+	  
+	<tr id="issue-5546" class="hascontextmenu odd issue status-1 priority-2 ">
+
+	    <td class="checkbox"><input name="ids[]" type="checkbox" value="5546" /></td>
+		<td><a href="/issues/5546">5546</a></td>
+        <td class="tracker">Defect</td><td class="status">New</td><td class="priority">Normal</td><td class="subject"><a href="/issues/5546">Password match check in use when changing to ldap</a></td><td class="updated_on">2010-05-18 13:20</td><td class="category">LDAP</td>
+	</tr>
+		</tbody>
+
+</table>
+</div>
+</form>
+<p class="pagination">1 <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">2</a> <a href="/projects/redmine/issues?page=3" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=3', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">3</a>  ... <a href="/projects/redmine/issues?page=85" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=85', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">85</a> <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Next &#187;</a> (1-25/2120)</p>
+
+
+<p class="other-formats">Also available in:
+	<span><a href="/projects/redmine/issues.atom" class="atom" rel="nofollow">Atom</a></span>
+	<span><a href="/projects/redmine/issues.csv" class="csv" rel="nofollow">CSV</a></span>
+	<span><a href="/projects/redmine/issues.pdf" class="pdf" rel="nofollow">PDF</a></span>
+</p>
+
+
+
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+new ContextMenu('/issues/context_menu')
+//]]>
+</script>
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>
