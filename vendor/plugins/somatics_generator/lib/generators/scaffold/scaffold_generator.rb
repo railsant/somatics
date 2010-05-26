@@ -59,8 +59,8 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       end
 
       # Layout and stylesheet.
-      m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "#{controller_file_name}.html.erb"))
-      m.template('style.css', 'public/stylesheets/scaffold.css')
+      m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"))
+      # m.template('style.css', 'public/stylesheets/scaffold.css')
 
       m.template(
         'controller.rb', File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
@@ -91,6 +91,8 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--force-plural",
              "Forces the generation of a plural ModelName") { |v| options[:force_plural] = v }
+      opt.on("--use_layout",
+             "generate controller specific layout") { |v| options[:use_controller_layout] = v }
     end
 
     def scaffold_views
