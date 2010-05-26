@@ -1,8 +1,11 @@
 class <%= controller_class_name %>Controller < ApplicationController
+  
+  layout Proc.new { |c| c.request.format.js? ? false : :application }
+  
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
-    @<%= table_name %> = <%= class_name %>.all.paginate(:page => params[:page])
+    @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
