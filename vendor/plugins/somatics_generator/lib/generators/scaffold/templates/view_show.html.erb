@@ -85,3 +85,7 @@ new ContextMenu('/issues/context_menu')
         
 				<div style="clear:both;"></div>
     </div>
+    
+    <%% content_for :sidebar do %>
+      <%%= link_to 'Back to <%= plural_name %>', <%= plural_name %>_path %>
+    <%% end %>
