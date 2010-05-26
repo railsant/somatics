@@ -59,7 +59,6 @@
 </form>
 
 <%%= will_paginate @<%= plural_name%>, :renderer => SomaticLinkRenderer%>
-<p class="pagination">1 <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">2</a> <a href="/projects/redmine/issues?page=3" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=3', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">3</a>  ... <a href="/projects/redmine/issues?page=85" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=85', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">85</a> <a href="/projects/redmine/issues?page=2" onclick="new Ajax.Updater('content', '/projects/redmine/issues?page=2', {asynchronous:true, evalScripts:true, method:'get', onComplete:function(request){window.scrollTo(0,0)}, parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">Next &#187;</a> (1-25/2120)</p>
 
 
 <p class="other-formats">Also available in:
