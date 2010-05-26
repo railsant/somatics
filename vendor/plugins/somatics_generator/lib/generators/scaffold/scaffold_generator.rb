@@ -60,11 +60,14 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
 
       # Layout and stylesheet.
       m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"))
+      
+      
       # m.template('style.css', 'public/stylesheets/scaffold.css')
 
       m.template(
         'controller.rb', File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
       )
+      add_header(m,controller_file_name)
 
       m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
       m.template('helper.rb',          File.join('app/helpers',     controller_class_path, "#{controller_file_name}_helper.rb"))
@@ -101,5 +104,14 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
 
     def model_name
       class_name.demodulize
+    end
+  private
+    def add_header(m,resource)
+      # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+      sentinel = '<!-- [HEADER] DO NOT REMOVE THIS LINE -->'
+      
+      m.gsub_file File.join('app/views/layouts', controller_class_path, "application.html.erb"), /(#{Regexp.escape(sentinel)})/mi do |match|
+        "<li><%= link_to '#{resource.humanize}', '/#{resource}'%></li>\n  #{match}\n"
+      end
     end
 end
