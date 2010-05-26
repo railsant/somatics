@@ -13,20 +13,31 @@
     <thead>
       <tr>
         <th>
-          <a href="/<%= plural_name %>" onclick="toggleIssuesSelection(Element.up(this, &quot;form&quot;)); return false;" title="Check all/Uncheck all"><img alt="Toggle_check" src="/images/toggle_check.png?1269784251" /></a>
+          <a href="/<%= plural_name %>" onclick="toggleIssuesSelection(Element.up(this, &quot;form&quot;)); return false;" title="Check all/Uncheck all">
+            <%% image_tag 'toggle_check.png', :alt => "Toggle_check"%>
+          </a>
         </th>
         <th title="Sort by &quot;#&quot;">
-          <a class="sort desc" href="/projects/redmine/issues?sort=id" onclick="new Ajax.Updater('content', '/projects/redmine/issues?sort=id', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('FtnTnEkxgj3hJW3Go1oBtJvc/F/WfkSYxgVGyQj/nyA=')}); return false;">#</a>
+          <%%= link_to_remote('#',{
+              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})},
+              :update => 'content',
+              :method => :get
+          },{
+            :title => "Sort by #",
+            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})),
+            :class => "sort #{'asc' if params[:sort] == 'id'} #{'desc' if params[:sort] == 'id_reverse'}"
+          }) %>
         </th>
         <% for attribute in attributes -%>
         <th title="Sort by &quot;<%= attribute.column.human_name %>&quot;">
           <%%= link_to_remote('<%=attribute.column.human_name%>',{
-              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>' : '<%=attribute.name%>_reverse' ), :page => nil})},
+              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>_reverse' : '<%=attribute.name%>' ), :page => nil})},
               :update => 'content',
       	:method => :get
           },{
             :title => "Sort by <%=attribute.column.human_name%>",
-            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>' : '<%=attribute.name%>_reverse' ), :page => nil}))
+            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>_reverse' : '<%=attribute.name%>' ), :page => nil})),
+            :class => "sort #{'asc' if params[:sort] == '<%= attribute.name %>'} #{'desc' if params[:sort] == '<%= attribute.name %>_reverse'}"
           }) %>
         </th>
         <% end -%>
