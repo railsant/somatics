@@ -101,9 +101,15 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.template 'controller.rb', File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
       m.template 'helper.rb',     File.join('app/helpers',     controller_class_path, "#{controller_file_name}_helper.rb")
 
-      for action in scaffold_views
-        m.template("view_#{action}.html.erb", File.join('app/views', controller_class_path, controller_file_name, "#{action}.html.erb"))
-      end
+      # Views
+      m.template "partial_form.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_form.html.erb")
+      m.template "partial_list.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_list.html.erb")
+      m.template "partial_show.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_show.html.erb")
+      m.template "partial_edit.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_edit.html.erb")
+      m.template "view_index.html.erb",   File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
+      m.template "view_new.html.erb",     File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
+      m.template "view_show.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
+      
 
       # Layout and stylesheet.
       m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"))
@@ -187,10 +193,6 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
              "Generate authenticated model") { |v| options[:authenticated] = true }
       opt.on("--include-activation",
              "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = true }
-    end
-
-    def scaffold_views
-      %w[ index show new edit ]
     end
 
     def model_name

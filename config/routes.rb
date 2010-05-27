@@ -1,22 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.employee_logout '/employees/logout', :controller => 'employees_sessions', :action => 'destroy'
-  map.employee_login '/employees/login', :controller => 'employees_sessions', :action => 'new'
-  map.employee_register '/employees/register', :controller => 'employees', :action => 'register'
-  map.employee_signup '/employees/signup', :controller => 'employees', :action => 'signup'
-  map.resource :employees_session
-
-  map.resources :employees
-
-  map.member_logout '/members/logout', :controller => 'members_sessions', :action => 'destroy'
-  map.member_login '/members/login', :controller => 'members_sessions', :action => 'new'
-  map.member_register '/members/register', :controller => 'members', :action => 'register'
-  map.member_signup '/members/signup', :controller => 'members', :action => 'signup'
-  map.resource :members_session
-
-  map.resources :members
-
-
-
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

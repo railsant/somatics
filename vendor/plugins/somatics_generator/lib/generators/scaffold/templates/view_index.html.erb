@@ -1,87 +1,24 @@
-<div class="contextual">
-</div>
+<div class="contextual"></div>
 
 <h2><%= plural_name.humanize %></h2>
 
 <!-- TODO Filters-->
 
 <form action="/<%= plural_name %>" method="post">
-<div class="autoscroll">
-<table class="list issues">
-
-    <thead>
-      <tr>
-        <th>
-          <a href="/<%= plural_name %>" onclick="toggleIssuesSelection(Element.up(this, &quot;form&quot;)); return false;" title="Check all/Uncheck all">
-            <%%= image_tag 'toggle_check.png', :alt => "Toggle_check"%>
-          </a>
-        </th>
-        <th title="Sort by &quot;#&quot;">
-          <%%= link_to_remote('#',{
-              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})},
-              :update => 'content',
-              :method => :get
-          },{
-            :title => "Sort by #",
-            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})),
-            :class => "sort #{'asc' if params[:sort] == 'id'} #{'desc' if params[:sort] == 'id_reverse'}"
-          }) %>
-        </th>
-        <% for attribute in attributes -%>
-        <th title="Sort by &quot;<%= attribute.column.human_name %>&quot;">
-          <%%= link_to_remote('<%=attribute.column.human_name%>',{
-              :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>_reverse' : '<%=attribute.name%>' ), :page => nil})},
-              :update => 'content',
-      	:method => :get
-          },{
-            :title => "Sort by <%=attribute.column.human_name%>",
-            :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == '<%= attribute.name %>' ? '<%= attribute.name %>_reverse' : '<%=attribute.name%>' ), :page => nil})),
-            :class => "sort #{'asc' if params[:sort] == '<%= attribute.name %>'} #{'desc' if params[:sort] == '<%= attribute.name %>_reverse'}"
-          }) %>
-        </th>
-        <% end -%>
-      </tr>
-  </thead>
-  <tbody>
-    <%% @<%= plural_name %>.each do |<%= singular_name %>| %>
-      <tr id="<%% dom_id(<%=singular_name%>)%>" class="hascontextmenu <%%= cycle 'odd' , 'even' %>  issue ">
-        <td class="checkbox"><input name="ids[]" type="checkbox" value="5586" /></td>
-        <td><%%=link_to <%= singular_name %>.id, <%= singular_name %>%></td>
-    <% for attribute in attributes -%>
-        <td class="<%= attribute.name %>"><%%=h <%= singular_name %>.<%= attribute.name %> %></td>
-    <% end -%>
-      </tr>
-    <%% end %>
-    
-  </tbody>
-</table>
-</div>
+  <div class="autoscroll">
+  <%%= render :partial => 'list', :locals => {:<%= plural_name %> => @<%= plural_name %>} %>
+  </div>
 </form>
+<%%= will_paginate @<%= plural_name%>, :renderer => SomaticLinkRenderer %>
 
-<%%= will_paginate @<%= plural_name%>, :renderer => SomaticLinkRenderer%>
-
-
+<!-- TODO Export-->
 <p class="other-formats">Also available in:
 	<span><a href="/projects/redmine/issues.atom" class="atom" rel="nofollow">Atom</a></span>
 	<span><a href="/projects/redmine/issues.csv" class="csv" rel="nofollow">CSV</a></span>
+	<span><a href="/projects/redmine/issues.xls" class="csv" rel="nofollow">XLS</a></span>	
 	<span><a href="/projects/redmine/issues.pdf" class="pdf" rel="nofollow">PDF</a></span>
 </p>
-
-
-
-
-
-
-
-<script type="text/javascript">
-//<![CDATA[
-new ContextMenu('/issues/context_menu')
-//]]>
-</script>
-
-        
-				<div style="clear:both;"></div>
-    </div>
+<div style="clear:both;"></div>
     
 <%% content_for :sidebar do %>
   <%%= link_to 'New <%= singular_name %>', new_<%= singular_name %>_path %>

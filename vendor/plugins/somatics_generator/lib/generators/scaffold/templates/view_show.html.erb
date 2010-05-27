@@ -1,91 +1,27 @@
 <div class="contextual">
-  <!-- <a href="<%%= edit_<%=singular_name%>_path(@<%=singular_name%>)%>" accesskey="e" class="icon icon-edit" onclick="showAndScrollTo('update','focus'); return false;">Update</a> -->
   <%%= link_to 'Update', edit_<%= singular_name %>_path(@<%= singular_name %>), :accesskey => "e", :class => "icon icon-edit", :onclick => "showAndScrollTo('update','focus'); return false;"%>
-  <!-- <a href="/issues/701/time_entries/new" class="icon icon-time-add">Log time</a> -->
-
-  <!-- <span id="watcher"><a class="icon icon-fav-off" href="/watchers/watch?object_id=701&amp;object_type=issue&amp;replace%5B%5D=watcher&amp;replace%5B%5D=watcher2" onclick="new Ajax.Request('/watchers/watch?object_id=701&amp;object_type=issue&amp;replace%5B%5D=watcher&amp;replace%5B%5D=watcher2', {asynchronous:true, evalScripts:true, parameters:'authenticity_token=' + encodeURIComponent('ECNQuVtR1/Fg9q4yBbTK6IfFrXBIjuAyJWYYrtg5/7M=')}); return false;">Watch</a></span> -->
-  <!-- <a href="/projects/burst/issues/701/copy" class="icon icon-duplicate">Duplicate</a> -->
-  <!-- <a href="/issues/701/move?copy_options%5Bcopy%5D=t" class="icon icon-copy">Copy</a> -->
-  <!-- <a href="/issues/701/move" class="icon icon-move">Move</a> -->
   <%%= link_to 'Delete', @<%= singular_name %>, :confirm => 'Are you sure?', :method => :delete ,:class => 'icon icon-del' %>
 </div>
-
 
 <h2><%= singular_name %> #<%%= @<%= singular_name %>.id %></h2>
 
 <div class="issue details">
-        
-      
-<!-- <div class="subject">      
-  <div><h3>Custom fields 'required' not taking Tracker into account</h3></div>
-</div>
-        <p class="author">
-        Added by <a href="/users/4992">Oskar Nordquist</a> <a href="/projects/redmine/activity?from=2010-05-25" title="2010-05-25 09:49">about 1 hour</a> ago.
-        
-        Updated <a href="/projects/redmine/activity?from=2010-05-25" title="2010-05-25 10:23">33 minutes</a> ago.
-        
-        </p> -->
-
-<table class="attributes">
-  
-  <% for attribute in attributes -%>
-  <tr>
-    <th><%= attribute.column.human_name %>:</th>
-    <td><%%=h @<%= singular_name %>.<%= attribute.name %> %></td>
-  </tr>
-  <% end -%>
-
-</table>
-
+	<%%= render :partial => 'show' , :locals => {:<%= singular_name %> => @<%= singular_name %>} %>
 </div>
 
-  <div id="update" style="display:none;">
+<div id="update" style="display:none;">
   <h3>Update</h3>
-    <div id="focus"></div>
-<%% form_for(@<%= singular_name %>) do |f| %>
-    <div class="box tabular settings">
-    <%%= f.error_messages %>
-    <% for attribute in attributes -%>
-    <p>
-      <%%= f.label :<%= attribute.name %> %>
-      <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-    </p>
-    <% end -%>
-    </div>
-    <%%= f.submit 'Update' %>
-<%% end %>
-
+  <div id="focus"></div>
+  <%%= render :partial => 'edit' , :locals => {:<%= singular_name %> => @<%= singular_name %>} %>
 </div>
-
 <div style="clear: both;"></div>
 
-<div class="contextual">
-</div>
-
-
-<div style="clear: both;"></div>
-
-
+<!-- TODO: Export -->
 <p class="other-formats">Also available in:
 	<span><a href="/issues/5587.atom" class="atom" rel="nofollow">Atom</a></span>
 	<span><a href="/issues/5587.pdf" class="pdf" rel="nofollow">PDF</a></span>
 </p>
-
-
-
-
-
-
-<div id="context-menu" style="display: none;"></div>
-<script type="text/javascript">
-//<![CDATA[
-new ContextMenu('/issues/context_menu')
-//]]>
-</script>
-        
-				<div style="clear:both;"></div>
-    </div>
     
-    <%% content_for :sidebar do %>
-      <%%= link_to 'Back to <%= plural_name %>', <%= plural_name %>_path %>
-    <%% end %>
+<%% content_for :sidebar do %>
+  <%%= link_to 'Back to <%= plural_name %>', <%= plural_name %>_path %>
+<%% end %>
