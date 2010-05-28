@@ -17,17 +17,7 @@
           :class => "sort #{'asc' if params[:sort] == 'id'} #{'desc' if params[:sort] == 'id_reverse'}"
         }) %>
       </th>
-      <th title="Sort by &quot;Attribute1&quot;">
-        <%%= link_to_remote('Attribute1', {
-            :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == 'attribute1' ? 'attribute1_reverse' : 'attribute1' ), :page => nil})},
-            :update => 'content',
-    	      :method => :get
-        }, {
-          :title => "Sort by Attribute1",
-          :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == 'attribute1' ? 'attribute1_reverse' : 'attribute1' ), :page => nil})),
-          :class => "sort #{'asc' if params[:sort] == 'attribute1'} #{'desc' if params[:sort] == 'attribute1_reverse'}"
-        }) %>
-      </th>
+      <th title="Sort by &quot;Attribute1&quot;"><%%= sort_link_helper 'Attribute1', 'attribute1'%></th>
 		</tr>
 	</thead>
 	<tbody>

@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+  
+  include RedmineFilter 
+  
+  layout Proc.new { |c| c.request.format.js? ? false : :application }
 end

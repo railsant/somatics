@@ -4,22 +4,39 @@ class <%= controller_class_name %>Controller < ApplicationController
   include <%= class_name %>AuthenticatedSystem
   <% end -%>
 
-  layout Proc.new { |c| c.request.format.js? ? false : :application }
+  # layout Proc.new { |c| c.request.format.js? ? false : :<%= singular_name %> }
   
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
+    @fields = ['id']
+    @headers = ['ID']
     respond_to do |format|
       format.html {
         @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])        
       }
-      format.xml  { 
+      format.xml { 
         @<%= table_name %> = <%= class_name %>.all
-        render :xml => @<%= table_name %>
       }
-      format.xls  {
+      format.csv {
+        @<%= table_name %> = <%= class_name %>.all
+        csv_string = FasterCSV.generate do |csv|
+        	csv << @headers
+        	@<%= table_name %>.each do |<%= singular_name %>|
+        	  csv << @fields.collect { |f| <%= singular_name %>.send(f) }        	    
+      	  end
+      	end
+      	send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present', 
+  				:disposition => "attachment; filename=<%= table_name %>.csv"
+      }
+      format.xls {
         @<%= table_name %> = <%= class_name %>.all
         render :xls => @<%= table_name %>
+      }
+      format.pdf {
+        params[:fields] = @fields
+        @<%= table_name %> = <%= class_name %>.all
+        prawnto :prawn => {:text_options => { :wrap => :character }, :page_layout => :portrait }
       }
     end
   end

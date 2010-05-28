@@ -3,16 +3,18 @@ excel_document(xml) do
     xml.Table do
       # Header
       xml.Row do
-          xml.Cell { xml.Data 'Attribute1', 'ss:Type' => 'String' }
-          xml.Cell { xml.Data 'Attribute2', 'ss:Type' => 'String' }
+        @headers.each do |header|
+          xml.Cell { xml.Data header, 'ss:Type' => 'String' }
+        end
       end
 
       # Rows
       unless @<%= plural_name %>.blank?
         for <%= singular_name %> in @<%= plural_name %>
           xml.Row do
-            xml.Cell { xml.Data <%= singular_name %>.id, 'ss:Type' => 'Number' }
-            xml.Cell { xml.Data <%= singular_name %>.id, 'ss:Type' => 'Number' }
+            @fields.each do |f|
+              xml.Cell { xml.Data <%= singular_name %>.send(f), 'ss:Type' => 'String' }
+            end
           end
         end
       end
