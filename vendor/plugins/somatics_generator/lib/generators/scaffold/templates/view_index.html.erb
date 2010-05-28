@@ -13,10 +13,10 @@
 
 <!-- TODO Export-->
 <p class="other-formats">Also available in:
-	<span><a href="/projects/redmine/issues.atom" class="atom" rel="nofollow">Atom</a></span>
-	<span><a href="/projects/redmine/issues.csv" class="csv" rel="nofollow">CSV</a></span>
-	<span><a href="/projects/redmine/issues.xls" class="csv" rel="nofollow">XLS</a></span>	
-	<span><a href="/projects/redmine/issues.pdf" class="pdf" rel="nofollow">PDF</a></span>
+	<span><%%=link_to 'XLS', formatted_<%= plural_name %>_path(:atom), :class => 'atom'%></span>
+	<span><%%=link_to 'CSV', formatted_<%= plural_name %>_path(:csv), :class => 'csv' %></span>
+	<span><%%=link_to 'XLS', formatted_<%= plural_name %>_path(:xls), :class => 'xls' %></span>	
+	<span><%%=link_to 'PDF', formatted_<%= plural_name %>_path(:pdf), :class => 'pdf'%></span>
 </p>
 <div style="clear:both;"></div>
     

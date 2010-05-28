@@ -9,11 +9,18 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
-    @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])
-
     respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @<%= table_name %> }
+      format.html {
+        @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])        
+      }
+      format.xml  { 
+        @<%= table_name %> = <%= class_name %>.all
+        render :xml => @<%= table_name %>
+      }
+      format.xls  {
+        @<%= table_name %> = <%= class_name %>.all
+        render :xls => @<%= table_name %>
+      }
     end
   end
 
