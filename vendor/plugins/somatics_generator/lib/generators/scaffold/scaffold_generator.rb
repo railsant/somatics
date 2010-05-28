@@ -109,8 +109,9 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.template "view_index.html.erb",   File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template "view_new.html.erb",     File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template "view_show.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
+      m.template "builder_index.xml.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xls.builder")
       m.template "builder_index.xls.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xls.builder")
-      m.template "builder_index.pdf.prawn", File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
+      m.template "builder_index.pdf.prawn",   File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
 
       # Layout and stylesheet.
       m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"))

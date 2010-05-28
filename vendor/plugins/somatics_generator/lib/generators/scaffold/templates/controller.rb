@@ -1,8 +1,12 @@
 class <%= controller_class_name %>Controller < ApplicationController
-  <% if options[:authenticated] %>
+  <% if options[:authenticated] -%>
   # Be sure to include AuthenticationSystem in Application Controller instead
   include <%= class_name %>AuthenticatedSystem
   <% end -%>
+  
+  # Add Redmine Filter Here
+  # available_filters "id",  {:name => 'Ref No', :type => :text, :order => 1}
+  # defaut_filter "id", '='
 
   # layout Proc.new { |c| c.request.format.js? ? false : :<%= singular_name %> }
   
