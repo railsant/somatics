@@ -9,7 +9,7 @@ module <%= class_name %>AuthenticatedSystem
     # Accesses the current <%= file_name %> from the session.
     # Future calls avoid the database because nil is not equal to false.
     def current_<%= file_name %>
-      @current_<%= file_name %> ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_<%= file_name %> == false
+      @current_<%= file_name %> ||= (<%= file_name %>_login_from_session || <%= file_name %>_login_from_basic_auth || <%= file_name %>_login_from_cookie) unless @current_<%= file_name %> == false
     end
 
     # Store the given <%= file_name %> id in the session.
@@ -65,7 +65,7 @@ module <%= class_name %>AuthenticatedSystem
       respond_to do |format|
         format.html do
           store_location
-          redirect_to new_<%= controller_routing_name %>_path
+          redirect_to <%= file_name %>_login_path
         end
         # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
         # Add any other API formats here.  (Some browsers, notably IE6, send Accept: */* and trigger 
@@ -104,7 +104,7 @@ module <%= class_name %>AuthenticatedSystem
     #
 
     # Called from #current_<%= file_name %>.  First attempt to login by the <%= file_name %> id stored in the session.
-    def login_from_session
+    def <%= file_name %>_login_from_session
       self.current_<%= file_name %> = <%= class_name %>.find_by_id(session[:<%= file_name %>_id]) if session[:<%= file_name %>_id]
     end
 
