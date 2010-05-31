@@ -117,7 +117,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       # Application, Layout and Stylesheet and Javascript.
       m.template 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"), :collision => :skip
       m.template 'application_helper.rb', File.join('app/helpers', controller_class_path, "application_helper.rb"), :collision => :skip
-      m.template 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb")
+      m.template 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), :collision => :skip
       add_header(m, controller_file_name)
       m.template 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
       m.template 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
