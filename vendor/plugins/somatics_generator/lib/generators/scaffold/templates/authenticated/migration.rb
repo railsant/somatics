@@ -13,6 +13,9 @@ class <%= migration_name %> < ActiveRecord::Migration
 <% if options[:include_activation] -%>
       t.column :activation_code,           :string, :limit => 40
       t.column :activated_at,              :datetime<% end %>
+<% for attribute in attributes -%>
+      t.<%= attribute.type %> :<%= attribute.name %>
+<% end -%>
     end
     add_index :<%= table_name %>, :login, :unique => true
   end

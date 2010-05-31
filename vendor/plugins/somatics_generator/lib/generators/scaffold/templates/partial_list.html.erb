@@ -6,18 +6,10 @@
           <%%= image_tag 'toggle_check.png', :alt => "Toggle_check"%>
         </a>
       </th>
-      <th title="Sort by &quot;#&quot;">
-        <%%= link_to_remote('ID', {
-            :url => {:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})},
-            :update => 'content',
-            :method => :get
-        }, {
-          :title => "Sort by #",
-          :href => url_for(:action => 'list', :params => params.merge({:sort => (params[:sort] == 'id' || params[:sort].blank? ? 'id_reverse' : 'id' ), :page => nil})),
-          :class => "sort #{'asc' if params[:sort] == 'id'} #{'desc' if params[:sort] == 'id_reverse'}"
-        }) %>
-      </th>
-      <th title="Sort by &quot;Attribute1&quot;"><%%= sort_link_helper 'Attribute1', 'attribute1'%></th>
+      <th title="Sort by &quot;#&quot;"><%%= sort_link_helper 'ID', 'id' %></th>
+<% for attribute in attributes %>
+      <th title="Sort by &quot;<%= attribute.name.humanize %>&quot;"><%%= sort_link_helper '<%= attribute.name.humanize %>', '<%= attribute.name%>'%></th>
+<% end -%>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,7 +18,9 @@
 		<tr id="<%% dom_id(<%=singular_name%>)%>" class="hascontextmenu <%%= cycle 'odd' , 'even' %>  issue ">
       <td class="checkbox"><input name="ids[]" type="checkbox" value="<%= singular_name %>.id" /></td>
       <td><%%=link_to <%= singular_name %>.id, <%= singular_name %>%></td>
-      <td class="id"><%%=h <%= singular_name %>.id %></td>
+<% for attribute in attributes -%>
+      <td class="<%= attribute.name %>"><%%=h <%= singular_name %>.<%= attribute.name %> %></td>
+<% end -%>
     </tr>		  
 		<%% end %>
 	<%% else -%>

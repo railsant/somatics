@@ -97,6 +97,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.directory(File.join('test/unit', class_path))
       m.directory(File.join('test/unit/helpers', class_path))
       m.directory(File.join('public/stylesheets', class_path))
+      m.directory(File.join('public/javascripts', class_path))
 
       m.template 'controller.rb', File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
       m.template 'helper.rb',     File.join('app/helpers',     controller_class_path, "#{controller_file_name}_helper.rb")
@@ -109,18 +110,21 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.template "view_index.html.erb",   File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template "view_new.html.erb",     File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template "view_show.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
-      m.template "builder_index.xml.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xls.builder")
+      m.template "builder_index.xml.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xml.builder")
       m.template "builder_index.xls.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xls.builder")
       m.template "builder_index.pdf.prawn",   File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
 
-      # Layout and stylesheet.
-      m.template('layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"))
+      # Application, Layout and Stylesheet and Javascript.
+      m.template 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"), :collision => :skip
+      m.template 'application_helper.rb', File.join('app/helpers', controller_class_path, "application_helper.rb"), :collision => :skip
+      m.template 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb")
+      add_header(m, controller_file_name)
+      m.template 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
+      m.template 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
       # m.template('style.css', 'public/stylesheets/scaffold.css')
 
-      add_header(m,controller_file_name)
-
       m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
-      m.template('helper_test.rb',     File.join('test/unit/helpers',    controller_class_path, "#{controller_file_name}_helper_test.rb"))
+      m.template('helper_test.rb',     File.join('test/unit/helpers', controller_class_path, "#{controller_file_name}_helper_test.rb"))
 
       m.route_resources controller_file_name
 
@@ -202,12 +206,12 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
     end
     
   private
-    def add_header(m,resource)
+    def add_header(m, resource)
       # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
       sentinel = '<!-- [HEADER] DO NOT REMOVE THIS LINE -->'
       
-      m.gsub_file File.join('app/views/layouts', controller_class_path, "application.html.erb"), /(#{Regexp.escape(sentinel)})/mi do |match|
-        "<li><%= link_to '#{resource.humanize}', '/#{resource}'%></li>\n  #{match}\n"
+      m.gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /(#{Regexp.escape(sentinel)})/mi do |match|
+        "<li><%= link_to '#{resource.humanize}', '/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n#{match}"
       end
     end
     

@@ -13,8 +13,8 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
-    @fields = ['id']
-    @headers = ['ID']
+    @fields = <%= attributes.collect {|attribute| attribute.name}.inspect %>
+    @headers = <%= attributes.collect {|attribute| attribute.name.humanize}.inspect %>
     respond_to do |format|
       format.html {
         @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])        
