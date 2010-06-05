@@ -3,12 +3,12 @@ class <%= controller_class_name %>Controller < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include <%= class_name %>AuthenticatedSystem
   <% end -%>
+  layout Proc.new { |c| c.request.format.js? ? false : 'admin/admin' }
   
   # Add Redmine Filter Here
-  # available_filters "id",  {:name => 'Ref No', :type => :text, :order => 1}
+  # available_filters "id",  {:name => 'Ref No', :type => :integer, :order => 1}
   # defaut_filter "id", '='
 
-  # layout Proc.new { |c| c.request.format.js? ? false : :<%= singular_name %> }
   
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
@@ -17,13 +17,13 @@ class <%= controller_class_name %>Controller < ApplicationController
     @headers = <%= attributes.collect {|attribute| attribute.name.humanize}.inspect %>
     respond_to do |format|
       format.html {
-        @<%= table_name %> = <%= class_name %>.all(:order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?)).paginate(:page => params[:page])        
+        @<%= table_name %> = <%= class_name %>.paginate(:page => params[:page], :conditions => query_statement, :order => (params[:sort].gsub('_reverse', ' DESC') unless params[:sort].blank?))
       }
       format.xml { 
-        @<%= table_name %> = <%= class_name %>.all
+        @<%= table_name %> = <%= class_name %>.all(:conditions => query_statement)
       }
       format.csv {
-        @<%= table_name %> = <%= class_name %>.all
+        @<%= table_name %> = <%= class_name %>.all(:conditions => query_statement)
         csv_string = FasterCSV.generate do |csv|
         	csv << @headers
         	@<%= table_name %>.each do |<%= singular_name %>|
@@ -34,12 +34,12 @@ class <%= controller_class_name %>Controller < ApplicationController
   				:disposition => "attachment; filename=<%= table_name %>.csv"
       }
       format.xls {
-        @<%= table_name %> = <%= class_name %>.all
+        @<%= table_name %> = <%= class_name %>.all(:conditions => query_statement)
         render :xls => @<%= table_name %>
       }
       format.pdf {
         params[:fields] = @fields
-        @<%= table_name %> = <%= class_name %>.all
+        @<%= table_name %> = <%= class_name %>.all(:conditions => query_statement)
         prawnto :prawn => {:text_options => { :wrap => :character }, :page_layout => :portrait }
       }
     end
@@ -80,7 +80,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     respond_to do |format|
       if @<%= file_name %>.save
         flash[:notice] = '<%= class_name %> was successfully created.'
-        format.html { redirect_to(@<%= file_name %>) }
+        format.html { redirect_to([:admin,@<%= file_name %>]) }
         format.xml  { render :xml => @<%= file_name %>, :status => :created, :location => @<%= file_name %> }
       else
         format.html { render :action => "new" }
@@ -97,7 +97,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     respond_to do |format|
       if @<%= file_name %>.update_attributes(params[:<%= file_name %>])
         flash[:notice] = '<%= class_name %> was successfully updated.'
-        format.html { redirect_to(@<%= file_name %>) }
+        format.html { redirect_to([:admin,@<%= file_name %>]) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -113,7 +113,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     @<%= file_name %>.destroy
 
     respond_to do |format|
-      format.html { redirect_to(<%= table_name %>_url) }
+      format.html { redirect_to(admin_<%= table_name %>_url) }
       format.xml  { head :ok }
     end
   end

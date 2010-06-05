@@ -1,6 +1,6 @@
 <div class="contextual">
-  <%%= link_to 'Update', edit_<%= singular_name %>_path(@<%= singular_name %>), :accesskey => "e", :class => "icon icon-edit", :onclick => "showAndScrollTo('update','focus'); return false;"%>
-  <%%= link_to 'Delete', @<%= singular_name %>, :confirm => 'Are you sure?', :method => :delete ,:class => 'icon icon-del' %>
+  <%%= link_to 'Update', edit_admin_<%= singular_name %>_path(@<%= singular_name %>), :accesskey => "e", :class => "icon icon-edit", :onclick => "showAndScrollTo('update','focus'); return false;"%>
+  <%%= link_to 'Delete', [:admin,@<%= singular_name %>], :confirm => 'Are you sure?', :method => :delete ,:class => 'icon icon-del' %>
 </div>
 
 <h2><%= singular_name %> #<%%= @<%= singular_name %>.id %></h2>
@@ -17,11 +17,11 @@
 <div style="clear: both;"></div>
 
 <!-- TODO: Export -->
-<p class="other-formats">Also available in:
+<!-- <p class="other-formats">Also available in:
 	<span><a href="/issues/5587.atom" class="atom" rel="nofollow">Atom</a></span>
 	<span><a href="/issues/5587.pdf" class="pdf" rel="nofollow">PDF</a></span>
-</p>
+</p> -->
     
 <%% content_for :sidebar do %>
-  <%%= link_to 'Back to <%= plural_name %>', <%= plural_name %>_path %>
+  <%%= link_to 'Back to <%= plural_name %>', admin_<%= plural_name %>_path %>
 <%% end %>

@@ -9,6 +9,5 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   
   include RedmineFilter 
-  
-  layout Proc.new { |c| c.request.format.js? ? false : :application }
+
 end

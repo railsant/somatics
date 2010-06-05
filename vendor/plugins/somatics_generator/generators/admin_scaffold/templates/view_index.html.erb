@@ -14,13 +14,13 @@
 
 <!-- TODO Export-->
 <p class="other-formats">Also available in:
-	<span><%%=link_to 'Atom', formatted_<%= plural_name %>_path(:atom), :class => 'atom'%></span>
-	<span><%%=link_to 'CSV',  formatted_<%= plural_name %>_path(:csv),  :class => 'csv' %></span>
-	<span><%%=link_to 'XLS',  formatted_<%= plural_name %>_path(:xls),  :class => 'xls' %></span>	
-	<span><%%=link_to 'PDF',  formatted_<%= plural_name %>_path(:pdf),  :class => 'pdf' %></span>
+	<span><%%=link_to 'Atom', formatted_admin_<%= plural_name %>_path(:atom), :class => 'atom'%></span>
+	<span><%%=link_to 'CSV',  formatted_admin_<%= plural_name %>_path(:csv),  :class => 'csv' %></span>
+	<span><%%=link_to 'XLS',  formatted_admin_<%= plural_name %>_path(:xls),  :class => 'xls' %></span>	
+	<span><%%=link_to 'PDF',  formatted_admin_<%= plural_name %>_path(:pdf),  :class => 'pdf' %></span>
 </p>
 <div style="clear:both;"></div>
     
 <%% content_for :sidebar do %>
-  <%%= link_to 'New <%= singular_name %>', new_<%= singular_name %>_path %>
+  <%%= link_to 'New <%= singular_name %>', new_admin_<%= singular_name %>_path %>
 <%% end %>

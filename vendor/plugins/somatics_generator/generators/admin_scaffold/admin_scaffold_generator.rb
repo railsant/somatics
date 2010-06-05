@@ -1,4 +1,4 @@
-class ScaffoldGenerator < Rails::Generator::NamedBase
+class AdminScaffoldGenerator < Rails::Generator::NamedBase
   default_options :skip_timestamps => false, 
                   :skip_migration => false, 
                   :force_plural => false,
@@ -43,7 +43,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       assign_names!(@name)
     end
 
-    @controller_name = @name.pluralize
+    @controller_name = 'admin/'+@name.pluralize
 
     base_name, @controller_class_path, @controller_file_path, @controller_class_nesting, @controller_class_nesting_depth = extract_modules(@controller_name)
     @controller_class_name_without_nesting, @controller_underscore_name, @controller_plural_name = inflect_names(base_name)
@@ -95,7 +95,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.directory(File.join('app/views/layouts', controller_class_path))
       m.directory(File.join('test/functional', controller_class_path))
       m.directory(File.join('test/unit', class_path))
-      m.directory(File.join('test/unit/helpers', class_path))
+      m.directory(File.join('test/unit/helpers', controller_class_path))
       m.directory(File.join('public/stylesheets', class_path))
       m.directory(File.join('public/javascripts', class_path))
 
@@ -115,18 +115,18 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
       m.template "builder_index.pdf.prawn",   File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
 
       # Application, Layout and Stylesheet and Javascript.
-      m.template 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "application.html.erb"), :collision => :skip
-      m.template 'application_helper.rb', File.join('app/helpers', controller_class_path, "application_helper.rb"), :collision => :skip
-      m.template 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), :collision => :skip
-      add_header(m, controller_file_name)
-      m.template 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
-      m.template 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
+      m.template_without_destroy 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "admin.html.erb"), :collision => :skip
+      m.template_without_destroy 'application_helper.rb', File.join('app/helpers', controller_class_path, "admin_helper.rb"), :collision => :skip
+      m.template_without_destroy 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), :collision => :skip
+      m.header_menu(controller_file_name)
+      m.template_without_destroy 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
+      m.template_without_destroy 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
       # m.template('style.css', 'public/stylesheets/scaffold.css')
 
       m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
       m.template('helper_test.rb',     File.join('test/unit/helpers', controller_class_path, "#{controller_file_name}_helper_test.rb"))
 
-      m.route_resources controller_file_name
+      m.route_namespaced_resources :admin, controller_file_name
 
       m.dependency 'model', [name] + @args, :collision => :skip unless options[:authenticated]
       
@@ -181,7 +181,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
   protected
     # Override with your own usage banner.
     def banner
-      "Usage: #{$0} scaffold ModelName [field:type, field:type]"
+      "Usage: #{$0} admin_scaffold ModelName [field:type, field:type]"
     end
 
     def add_options!(opt)
@@ -199,6 +199,7 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
              "Generate authenticated model") { |v| options[:authenticated] = true }
       opt.on("--include-activation",
              "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = true }
+             
     end
 
     def model_name
@@ -206,14 +207,6 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
     end
     
   private
-    def add_header(m, resource)
-      # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-      sentinel = '<!-- [HEADER] DO NOT REMOVE THIS LINE -->'
-      
-      m.gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /(#{Regexp.escape(sentinel)})/mi do |match|
-        "<li><%= link_to '#{resource.humanize}', '/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n#{match}"
-      end
-    end
     
     def generate_sessions_controller(m)
       # Check for class naming collisions.
@@ -278,4 +271,46 @@ class ScaffoldGenerator < Rails::Generator::NamedBase
         m.route_name("#{file_name}_logout",   "/#{controller_plural_name}/logout",   {:controller => sessions_controller_controller_name, :action => 'destroy'})
       end                     
     end
+end
+
+class Rails::Generator::Commands::Destroy
+  def route_namespaced_resources(namespace, *resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    look_for = "\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+    logger.route "#{namespace}.resources #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{Regexp.escape(look_for)})/mi, ''
+    end
+  end
+  
+  def header_menu(resource)
+    # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    look_for = "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
+    logger.route look_for
+    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /(#{Regexp.escape(look_for)})/mi, ''
+  end
+  
+  def template_without_destroy(relative_source, relative_destination, file_options = {})
+  end
+end
+
+class Rails::Generator::Commands::Create
+  def route_namespaced_resources(namespace, *resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    sentinel = 'ActionController::Routing::Routes.draw do |map|'
+    logger.route "#{namespace}.resources #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+        "#{match}\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+      end
+    end
+  end
+  
+  def header_menu(resource)
+    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /\z/mi do |match|
+      "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
+    end
+  end
+  
+  alias_method  :template_without_destroy,  :template
 end
