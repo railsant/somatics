@@ -17,13 +17,13 @@ h1. Features
 
 Somatic is open source software and relies on your contributions to grow! 
 
-* http://github.com/inspiresynergy/somatics
+* "http://github.com/inspiresynergy/somatics":http://github.com/inspiresynergy/somatics
 
 GitHub always contains the latest BaseApp code. Fork your own development branch here if you wish to contribute code.
 
 Pull requests should be send to ‘inspiresynergy’ to include them in the main Somatics code base.
 
-* http://somatics.lighthouseapp.com [TODO]
+* "http://inspiresynergy.lighthouseapp.com/projects/53315-somatics/overview":http://inspiresynergy.lighthouseapp.com/projects/53315-somatics/overview
 
 Bug reports and feature requests should be posted in LightHouse.
 
