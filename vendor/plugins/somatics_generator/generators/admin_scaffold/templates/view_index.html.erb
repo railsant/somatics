@@ -22,5 +22,6 @@
 <div style="clear:both;"></div>
     
 <%% content_for :sidebar do %>
+  <h3>Actions</h3>
   <%%= link_to 'New <%= singular_name %>', new_admin_<%= singular_name %>_path %>
 <%% end %>

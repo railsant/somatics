@@ -111,7 +111,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   def destroy
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     @<%= file_name %>.destroy
-
+    flash[:notice] = '<%= class_name %> was successfully deleted.'
     respond_to do |format|
       format.html { redirect_to(admin_<%= table_name %>_url) }
       format.xml  { head :ok }
