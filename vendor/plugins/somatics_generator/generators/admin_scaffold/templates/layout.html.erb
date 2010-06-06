@@ -55,7 +55,7 @@
           </ul>
         </div>
       </div> <!-- End of Header -->
-      <div class="main" id="main">
+      <div class="main <%%='nosidebar' unless has_content?(:sidebar)%>" id="main">
         <div id="sidebar">        
           <%%= yield :sidebar %>
           <!-- <h3>Issues</h3>
