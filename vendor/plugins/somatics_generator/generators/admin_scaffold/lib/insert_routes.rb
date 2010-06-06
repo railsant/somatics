@@ -21,6 +21,25 @@ Rails::Generator::Commands::Create.class_eval do
       end
     end
   end
+  
+  def route_namespaced_resources(namespace, *resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    sentinel = 'ActionController::Routing::Routes.draw do |map|'
+    logger.route "#{namespace}.resources #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+        "#{match}\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+      end
+    end
+  end
+  
+  def header_menu(resource)
+    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /\z/mi do |match|
+      "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
+    end
+  end
+  
+  alias_method  :template_without_destroy,  :template
 end
 
 Rails::Generator::Commands::Destroy.class_eval do
@@ -39,6 +58,24 @@ Rails::Generator::Commands::Destroy.class_eval do
     unless options[:pretend]
       gsub_file    'config/routes.rb', /(#{look_for})/mi, ''
     end
+  end
+  
+  def route_namespaced_resources(namespace, *resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    look_for = "\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+    logger.route "#{namespace}.resources #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{Regexp.escape(look_for)})/mi, ''
+    end
+  end
+  
+  def header_menu(resource)
+    # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    look_for = "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
+    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /(#{Regexp.escape(look_for)})/mi, ''
+  end
+  
+  def template_without_destroy(relative_source, relative_destination, file_options = {})
   end
 end
 
