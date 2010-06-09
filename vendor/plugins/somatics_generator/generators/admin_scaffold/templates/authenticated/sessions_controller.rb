@@ -1,8 +1,8 @@
 # This controller handles the login/logout function of the site.  
-class <%= sessions_controller_class_name %>Controller < ApplicationController
+class <%= sessions_controller_class_name %>Controller < Admin::AdminController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include <%= class_name %>AuthenticatedSystem
-
+  skip_before_filter :<%= file_name %>_login_required
   # render new.rhtml
   def new
   end

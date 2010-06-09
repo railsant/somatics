@@ -1,15 +1,14 @@
-class <%= controller_class_name %>Controller < ApplicationController
-  <% if options[:authenticated] -%>
+class <%= controller_class_name %>Controller < Admin::AdminController
+<% if options[:authenticated] -%>
   # Be sure to include AuthenticationSystem in Application Controller instead
   include <%= class_name %>AuthenticatedSystem
-  <% end -%>
+<% end -%>
   layout Proc.new { |c| c.request.format.js? ? false : 'admin/admin' }
   
   # Add Redmine Filter Here
   # available_filters "id",  {:name => 'Ref No', :type => :integer, :order => 1}
   # defaut_filter "id", '='
 
-  
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index

@@ -24,6 +24,6 @@ Description:
     'script/destroy scaffold ModelName'.
 
 Examples:
-    `./script/generate scaffold post`
-    `./script/generate scaffold post title:string body:text published:boolean`
-    `./script/generate scaffold purchase order_id:integer amount:decimal`
+    `./script/generate admin_scaffold post`
+    `./script/generate admin_scaffold post title:string body:text published:boolean`
+    `./script/generate admin_scaffold purchase order_id:integer amount:decimal`

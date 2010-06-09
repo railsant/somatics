@@ -114,18 +114,18 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
       m.template "builder_index.pdf.prawn",   File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
 
       # Application, Layout and Stylesheet and Javascript.
-      m.template_without_destroy 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "admin.html.erb"), :collision => :skip
-      m.template_without_destroy 'application_helper.rb', File.join('app/helpers', controller_class_path, "admin_helper.rb"), :collision => :skip
-      m.template_without_destroy 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), :collision => :skip
+      # m.template_without_destroy 'layout.html.erb', File.join('app/views/layouts', controller_class_path, "admin.html.erb"), :collision => :skip
+      # m.template_without_destroy 'application_helper.rb', File.join('app/helpers', controller_class_path, "admin_helper.rb"), :collision => :skip
+      # m.template_without_destroy 'partial_menu.html.erb', File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), :collision => :skip
       m.header_menu(controller_file_name)
-      m.template_without_destroy 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
-      m.template_without_destroy 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
+      # m.template_without_destroy 'context_menu.js', 'public/javascripts/context_menu.js', :collision => :skip
+      # m.template_without_destroy 'select_list_move.js', 'public/javascripts/select_list_move.js', :collision => :skip
       # m.template('style.css', 'public/stylesheets/scaffold.css')
 
       m.template('functional_test.rb', File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb"))
       m.template('helper_test.rb',     File.join('test/unit/helpers', controller_class_path, "#{controller_file_name}_helper_test.rb"))
 
-      m.route_namespaced_resources :admin, controller_file_name
+      m.admin_route_resources controller_file_name
 
       m.dependency 'model', [name] + @args, :collision => :skip unless options[:authenticated]
       
@@ -285,6 +285,18 @@ class Rails::Generator::Commands::Create
     end
   end
   
+  def admin_route_resources(*resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    sentinel = 'map.namespace(:admin) do |admin|'
+
+    logger.route "admin.resources #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+        "#{match}\n    admin.resources #{resource_list}"
+      end
+    end
+  end  
+  
   def admin_route_name(name, path, route_options = {})
     sentinel = 'map.namespace(:admin) do |admin|'
     
@@ -321,6 +333,15 @@ class Rails::Generator::Commands::Destroy
     resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
     look_for = "\n    admin.resource #{resource_list}"
     logger.route "admin.resource #{resource_list}"
+    unless options[:pretend]
+      gsub_file 'config/routes.rb', /(#{look_for})/mi, ''
+    end
+  end
+  
+  def admin_route_resources(*resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    look_for = "\n    admin.resources #{resource_list}"
+    logger.route "admin.resources #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{look_for})/mi, ''
     end
