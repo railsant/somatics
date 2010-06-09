@@ -14,10 +14,9 @@
 
 <!-- TODO Export-->
 <p class="other-formats">Also available in:
-	<span><%%=link_to 'Atom', formatted_admin_<%= plural_name %>_path(:atom), :class => 'atom'%></span>
-	<span><%%=link_to 'CSV',  formatted_admin_<%= plural_name %>_path(:csv),  :class => 'csv' %></span>
-	<span><%%=link_to 'XLS',  formatted_admin_<%= plural_name %>_path(:xls),  :class => 'xls' %></span>	
-	<span><%%=link_to 'PDF',  formatted_admin_<%= plural_name %>_path(:pdf),  :class => 'pdf' %></span>
+	<span><%%=link_to 'CSV',  admin_<%= plural_name %>_path(:format => :csv),  :class => 'csv' %></span>
+	<span><%%=link_to 'XLS',  admin_<%= plural_name %>_path(:format => :xls),  :class => 'xls' %></span>	
+	<span><%%=link_to 'PDF',  admin_<%= plural_name %>_path(:format => :pdf),  :class => 'pdf' %></span>
 </p>
 <div style="clear:both;"></div>
     

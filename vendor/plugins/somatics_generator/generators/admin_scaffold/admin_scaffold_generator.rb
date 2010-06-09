@@ -43,7 +43,7 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
       assign_names!(@name)
     end
 
-    @controller_name = 'admin/'+@name.pluralize
+    @controller_name = 'admin/' + @name.pluralize
 
     base_name, @controller_class_path, @controller_file_path, @controller_class_nesting, @controller_class_nesting_depth = extract_modules(@controller_name)
     @controller_class_name_without_nesting, @controller_underscore_name, @controller_plural_name = inflect_names(base_name)
@@ -67,7 +67,6 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
   
   def initialize_sessions_controller_name
     @sessions_controller_name = "#{@controller_name}_sessions"
-
     base_name, @sessions_controller_class_path, @sessions_controller_file_path, @sessions_controller_class_nesting, @sessions_controller_class_nesting_depth = extract_modules(@sessions_controller_name)
     @sessions_controller_class_name_without_nesting, @sessions_controller_file_name, @sessions_controller_plural_name = inflect_names(base_name)
     @sessions_controller_singular_name = @sessions_controller_file_name.singularize
@@ -218,7 +217,7 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
       # Controller, helper, views, and test directories.
       m.directory File.join('app/controllers', sessions_controller_class_path)
       m.directory File.join('app/helpers', sessions_controller_class_path)
-      m.directory File.join('app/views', sessions_controller_class_path, sessions_controller_name)
+      m.directory File.join('app/views', sessions_controller_class_path, @sessions_controller_file_name)
       m.directory File.join('app/views', class_path, "#{file_name}_mailer") if options[:include_activation]
       m.directory File.join('config/initializers')      
       m.directory File.join('test/functional', sessions_controller_class_path)
@@ -231,21 +230,21 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
         end
       end
 
-      m.template 'authenticated/sessions_controller.rb', File.join('app/controllers', sessions_controller_class_path, "#{sessions_controller_name}_controller.rb")
+      m.template 'authenticated/sessions_controller.rb', File.join('app/controllers', sessions_controller_class_path, "#{@sessions_controller_file_name}_controller.rb")
 
       m.template 'authenticated/authenticated_system.rb', File.join('lib', "#{file_name}_authenticated_system.rb")
       m.template 'authenticated/authenticated_test_helper.rb', File.join('lib', "#{file_name}_authenticated_test_helper.rb")
       m.template 'authenticated/site_keys.rb', site_keys_file
       
-      m.template 'authenticated/test/sessions_functional_test.rb', File.join('test/functional', sessions_controller_class_path, "#{sessions_controller_name}_controller_test.rb")
+      m.template 'authenticated/test/sessions_functional_test.rb', File.join('test/functional', sessions_controller_class_path, "#{@sessions_controller_file_name}_controller_test.rb")
       m.template 'authenticated/test/mailer_test.rb', File.join('test/unit', class_path, "#{file_name}_mailer_test.rb") if options[:include_activation]
       m.template 'authenticated/test/unit_test.rb', File.join('test/unit', class_path, "#{file_name}_test.rb")
 
       m.template 'authenticated/test/users.yml', File.join('test/fixtures', class_path, "#{table_name}.yml")                            
-      m.template 'authenticated/helper.rb', File.join('app/helpers', sessions_controller_class_path, "#{sessions_controller_name}_helper.rb")
+      m.template 'authenticated/helper.rb', File.join('app/helpers', sessions_controller_class_path, "#{@sessions_controller_file_name}_helper.rb")
 
       # View templates
-      m.template 'authenticated/login.html.erb',  File.join('app/views', sessions_controller_class_path, sessions_controller_name, "new.html.erb")
+      m.template 'authenticated/login.html.erb',  File.join('app/views', sessions_controller_class_path, @sessions_controller_file_name, "new.html.erb")
       m.template 'authenticated/signup.html.erb', File.join('app/views', controller_class_path, controller_file_name, "signup.html.erb")
       m.template 'authenticated/_model_partial.html.erb', File.join('app/views', controller_class_path, controller_file_name, "_#{file_name}_bar.html.erb")
       
@@ -264,34 +263,35 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
 
       unless options[:skip_routes]
         # Note that this fails for nested classes -- you're on your own with setting up the routes.
-        m.route_resource  sessions_controller_singular_name
-        m.route_name("#{file_name}_signup",   "/#{controller_plural_name}/signup",   {:controller => controller_plural_name, :action => 'signup'})
-        m.route_name("#{file_name}_register", "/#{controller_plural_name}/register", {:controller => controller_plural_name, :action => 'register'})
-        m.route_name("#{file_name}_login",    "/#{controller_plural_name}/login",    {:controller => sessions_controller_controller_name, :action => 'new'})
-        m.route_name("#{file_name}_logout",   "/#{controller_plural_name}/logout",   {:controller => sessions_controller_controller_name, :action => 'destroy'})
+        m.admin_route_resource  sessions_controller_singular_name
+        m.admin_route_name("#{file_name}_signup",   "/#{controller_plural_name}/signup",   {:controller => controller_plural_name, :action => 'signup'})
+        m.admin_route_name("#{file_name}_register", "/#{controller_plural_name}/register", {:controller => controller_plural_name, :action => 'register'})
+        m.admin_route_name("#{file_name}_login",    "/#{controller_plural_name}/login",    {:controller => sessions_controller_controller_name, :action => 'new'})
+        m.admin_route_name("#{file_name}_logout",   "/#{controller_plural_name}/logout",   {:controller => sessions_controller_controller_name, :action => 'destroy'})
       end                     
     end
 end
-class Rails::Generator::Commands::Create
-  def route_resource(*resources)
-    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-    sentinel = 'ActionController::Routing::Routes.draw do |map|'
 
-    logger.route "map.resource #{resource_list}"
+class Rails::Generator::Commands::Create
+  def admin_route_resource(*resources)
+    resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+    sentinel = 'map.namespace(:admin) do |admin|'
+
+    logger.route "admin.resource #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-        "#{match}\n  map.resource #{resource_list}\n"
+        "#{match}\n    admin.resource #{resource_list}"
       end
     end
   end
   
-  def route_name(name, path, route_options = {})
-    sentinel = 'ActionController::Routing::Routes.draw do |map|'
+  def admin_route_name(name, path, route_options = {})
+    sentinel = 'map.namespace(:admin) do |admin|'
     
-    logger.route "map.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
+    logger.route "admin.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-        "#{match}\n  map.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
+        "#{match}\n    admin.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
       end
     end
   end
@@ -302,7 +302,7 @@ class Rails::Generator::Commands::Create
     logger.route "#{namespace}.resources #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-        "#{match}\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+        "#{match}\n  map.namespace(:#{namespace}) do |#{namespace}|\n    #{namespace}.resources #{resource_list}\n  end\n"
       end
     end
   end
@@ -317,18 +317,18 @@ class Rails::Generator::Commands::Create
 end
 
 class Rails::Generator::Commands::Destroy
-  def route_resource(*resources)
+  def admin_route_resource(*resources)
     resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-    look_for = "\n  map.resource #{resource_list}\n"
-    logger.route "map.resource #{resource_list}"
+    look_for = "\n    admin.resource #{resource_list}"
+    logger.route "admin.resource #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{look_for})/mi, ''
     end
   end
   
-  def route_name(name, path, route_options = {})
-    look_for =   "\n  map.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
-    logger.route "map.#{name} '#{path}',     :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
+  def admin_route_name(name, path, route_options = {})
+    look_for =   "\n    admin.#{name} '#{path}', :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
+    logger.route "admin.#{name} '#{path}',     :controller => '#{route_options[:controller]}', :action => '#{route_options[:action]}'"
     unless options[:pretend]
       gsub_file    'config/routes.rb', /(#{look_for})/mi, ''
     end
@@ -336,7 +336,7 @@ class Rails::Generator::Commands::Destroy
   
   def route_namespaced_resources(namespace, *resources)
     resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-    look_for = "\n  map.namespace(:#{namespace}) do |#{namespace}|\n     #{namespace}.resources #{resource_list}\n  end\n"
+    look_for = "\n  map.namespace(:#{namespace}) do |#{namespace}|\n    #{namespace}.resources #{resource_list}\n  end\n"
     logger.route "#{namespace}.resources #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(look_for)})/mi, ''
@@ -354,12 +354,12 @@ class Rails::Generator::Commands::Destroy
 end
 
 class Rails::Generator::Commands::List
-  def route_resource(*resources)
+  def admin_route_resource(*resources)
     resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
     logger.route "map.resource #{resource_list}"
   end
   
-  def route_name(name, path, options = {})
+  def admin_route_name(name, path, options = {})
     logger.route "map.#{name} '#{path}', :controller => '{options[:controller]}', :action => '#{options[:action]}'"
   end
 end
