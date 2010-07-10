@@ -117,6 +117,25 @@ class <%= controller_class_name %>Controller < Admin::AdminController
     end
   end
   
+  # def bulk
+  #   unless params[:ids].blank?
+  #     <%= table_name %> = <%= class_name %>.find(params[:ids])
+  #     success = true
+  #     params[:<%= file_name %>].delete_if {|k, v| v.blank?}
+  #     <%= table_name %>.each do |<%= file_name %>|
+  #       success &&= <%= file_name %>.update_attributes(params[:<%= file_name %>])
+  #     end
+  #     success ? flash[:notice] = '<%= class_name.pluralize %> were successfully updated.' : flash[:error] = 'Bulk Update Failed.'
+  #   else
+  #     flash[:error] = 'No <%= class_name %> record is selected.'
+  #   end
+  #   
+  #   respond_to do |format|
+  #     format.html { redirect_to(admin_<%= table_name %>_path) }
+  #     format.xml  { head :ok }
+  #   end
+  # end
+  
 <% if options[:authenticated] -%>
   def signup
     @<%= file_name %> = <%= class_name %>.new

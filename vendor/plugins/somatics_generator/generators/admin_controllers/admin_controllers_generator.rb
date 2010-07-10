@@ -7,7 +7,8 @@ class AdminControllersGenerator < Rails::Generator::Base
       # Controller, helper, views, test and stylesheets directories.
       m.directory File.join('app/controllers/admin')
       m.directory File.join('app/helpers/admin')
-      m.directory File.join('app/views/layouts/admin')
+      m.directory File.join('app/views/layouts')
+      m.directory File.join('app/views/admin/shared')
       m.directory File.join('app/views/admin/home')
       m.directory File.join('test/functional/admin')
       m.directory File.join('public/stylesheets')
@@ -25,7 +26,7 @@ class AdminControllersGenerator < Rails::Generator::Base
       
       # Layouts
       m.template 'layout_admin.html.erb', File.join('app/views/layouts', "admin.html.erb")
-      m.template 'partial_menu.html.erb', File.join('app/views/layouts/admin', "_menu.html.erb")
+      m.template 'partial_menu.html.erb', File.join('app/views/admin/shared', "_menu.html.erb")
       
       # Stylesheets and Javascripts.
       m.template_without_destroy 'css_admin.css', 'public/stylesheets/admin.css'

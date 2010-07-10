@@ -106,6 +106,7 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
       m.template "partial_list.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_list.html.erb")
       m.template "partial_show.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_show.html.erb")
       m.template "partial_edit.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_edit.html.erb")
+      m.template "partial_bulk.html.erb", File.join('app/views', controller_class_path, controller_file_name, "_bulk.html.erb")
       m.template "view_index.html.erb",   File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template "view_new.html.erb",     File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template "view_show.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
@@ -293,7 +294,7 @@ class Rails::Generator::Commands::Create
     logger.route "admin.resources #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-        "#{match}\n    admin.resources #{resource_list}"
+        "#{match}\n    admin.resources #{resource_list}, :collection => {:bulk => :post}"
       end
     end
   end  
@@ -321,7 +322,7 @@ class Rails::Generator::Commands::Create
   end
   
   def header_menu(resource)
-    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /\z/mi do |match|
+    gsub_file File.join('app/views/admin/shared', "_menu.html.erb"), /\z/mi do |match|
       "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
     end
   end
@@ -341,7 +342,7 @@ class Rails::Generator::Commands::Destroy
   
   def admin_route_resources(*resources)
     resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-    look_for = "\n    admin.resources #{resource_list}"
+    look_for = "\n    admin.resources #{resource_list}, :collection => {:bulk => :post}"
     logger.route "admin.resources #{resource_list}"
     unless options[:pretend]
       gsub_file 'config/routes.rb', /(#{look_for})/mi, ''
@@ -368,7 +369,7 @@ class Rails::Generator::Commands::Destroy
   def header_menu(resource)
     # resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
     look_for = "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
-    gsub_file File.join('app/views/layouts', controller_class_path, "_menu.html.erb"), /(#{Regexp.escape(look_for)})/mi, ''
+    gsub_file File.join('app/views/admin/shared', "_menu.html.erb"), /(#{Regexp.escape(look_for)})/mi, ''
   end
   
   def template_without_destroy(relative_source, relative_destination, file_options = {})

@@ -225,3 +225,7 @@ Event.observe(window, 'load', function() {
   	el.hide();
 	});
 });
+
+function link_to(url) {
+  window.location = url;
+}

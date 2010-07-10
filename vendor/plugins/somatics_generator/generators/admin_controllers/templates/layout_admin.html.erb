@@ -50,11 +50,13 @@
           </form>
         </div>
         <h1>Somatics - Admin Panel</h1>
+        <%%# if current_user %>
         <div id="main-menu">
           <ul>
-            <%%= render :partial => 'layouts/admin/menu' %>
+            <%%= render :partial => 'admin/shared/menu' %>
           </ul>
         </div>
+        <%%# end %>
       </div> <!-- End of Header -->
       <div class="main <%%='nosidebar' unless has_content?(:sidebar)%>" id="main">
         <div id="sidebar">        
