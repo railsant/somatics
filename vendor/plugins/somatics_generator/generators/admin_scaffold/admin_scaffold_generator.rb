@@ -109,6 +109,7 @@ class AdminScaffoldGenerator < Rails::Generator::NamedBase
       m.template "view_index.html.erb",   File.join('app/views', controller_class_path, controller_file_name, "index.html.erb")
       m.template "view_new.html.erb",     File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
       m.template "view_show.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "show.html.erb")
+      m.template "view_edit.html.erb",    File.join('app/views', controller_class_path, controller_file_name, "edit.html.erb")
       m.template "builder_index.xml.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xml.builder")
       m.template "builder_index.xls.builder", File.join('app/views', controller_class_path, controller_file_name, "index.xls.builder")
       m.template "builder_index.pdf.prawn",   File.join('app/views', controller_class_path, controller_file_name, "index.pdf.prawn")
