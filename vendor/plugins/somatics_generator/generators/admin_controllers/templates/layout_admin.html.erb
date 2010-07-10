@@ -27,17 +27,18 @@
   <div id="wrapper">
     <div id="wrapper2">
       <div id="top-menu">
+        <%%# if current_user %>
         <div id="account">
           <ul>
-            <li><%%=link_to 'Administrator', '#'%> (<%%=link_to 'Logout', '/logout'%>)</li>
-            <!-- <li><a href="/login" class="login">Sign in</a></li> -->
-            <!-- <li><a href="/account/register" class="register">Register</a></li> -->
+            <li>Logged in as Administrator<%%#= link_to current_user.name, admin_user_url(current_user) %></li>
+            <li><%%#= link_to 'Logout', admin_user_logout_url %></li>
           </ul>
         </div>
+        <%%# end %>
         <ul>
-          <li><a href="/" class="home">Home</a></li>
-          <li><a href="/admin" class="projects">Admin Panel</a></li>
-          <li><a href="http://support.inspiresynergy.com" class="supports">Support</a></li>
+          <li><%%= link_to 'Home', '/' %></li>
+          <li><%%= link_to 'Admin Panel', admin_root_path %></li>
+          <li><%%= link_to 'Support', 'http://support.inspiresynergy.com', :class => 'supports' %></li>
         </ul>
       </div> <!-- End of Top Menu -->
       <div id="header">

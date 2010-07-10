@@ -28,12 +28,12 @@ class AdminControllersGenerator < Rails::Generator::Base
       m.template 'partial_menu.html.erb', File.join('app/views/layouts/admin', "_menu.html.erb")
       
       # Stylesheets and Javascripts.
-      m.template 'css_admin.css', 'public/stylesheets/admin.css'
-      m.template 'css_jstoolbar.css', 'public/stylesheets/jstoolbar.css'
-      m.template 'css_context_menu.css', 'public/stylesheets/context_menu.css'
-      m.template 'css_csshover.htc', 'public/stylesheets/csshover.htc'      
-      m.template 'js_context_menu.js', 'public/javascripts/context_menu.js'
-      m.template 'js_select_list_move.js', 'public/javascripts/select_list_move.js'
+      m.template_without_destroy 'css_admin.css', 'public/stylesheets/admin.css'
+      m.template_without_destroy 'css_jstoolbar.css', 'public/stylesheets/jstoolbar.css'
+      m.template_without_destroy 'css_context_menu.css', 'public/stylesheets/context_menu.css'
+      m.template_without_destroy 'css_csshover.htc', 'public/stylesheets/csshover.htc'      
+      m.template_without_destroy 'js_context_menu.js', 'public/javascripts/context_menu.js'
+      m.template_without_destroy 'js_select_list_move.js', 'public/javascripts/select_list_move.js'
       
       # Images
       # m.file 'vendor/somatics_generator/images/*', 'public/images', :collision => :skip
@@ -92,6 +92,8 @@ class Rails::Generator::Commands::Create
       "<li><%= link_to '#{resource.humanize}', '/admin/#{resource}', :class => (match_controller?('#{controller_file_name}'))  ? 'selected' : ''%></li>\n"
     end
   end
+  
+  alias_method  :template_without_destroy,  :template
 end
 
 class Rails::Generator::Commands::Destroy
