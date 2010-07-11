@@ -19,8 +19,8 @@ plugin 'restful_authentication',
   # :git => ''
 # theme_support break my rails 2.3.5 
 # http://inspiresynergy.lighthouseapp.com/projects/53315-somatics/tickets/14-theme_support-break-my-rails-235
- plugin 'theme_support',
-   :git => 'git://github.com/aussiegeek/theme_support.git'
+ # plugin 'theme_support',
+ #   :git => 'git://github.com/aussiegeek/theme_support.git'
 plugin 'tinymce_hammer',
   :git => 'git://github.com/trevorrowe/tinymce_hammer.git'
 plugin 'to_xls',
@@ -29,7 +29,39 @@ plugin 'to_xls',
 gem 'will_paginate'
 gem 'prawn', :version => '0.6.3'
 
-rakefile("setup_svn.rake") do
+rakefile "heroku.rake" do
+  <<-TASK
+  namespace :heroku do
+    desc "Generate .gems file for Heroku"
+    task :gems => :environment do
+      require 'open-uri'
+      installed_gems = []
+      url = "http://installed-gems.heroku.com/"
+      open(url).read.scan(/<li>(\\w+) [^<]*<\\/li>/) do |w| 
+        installed_gems << w.first
+      end
+
+      gems = Rails.configuration.gems
+
+      # output .gems
+      dot_gems = File.join(RAILS_ROOT, ".gems")
+      File.open(dot_gems, "w") do |f|
+        output = []
+        gems.each do |gem|
+          next if installed_gems.include?(gem.name)
+          spec = "\#{gem.name} --version '\#{gem.version_requirements.to_s}'"
+          spec << " --source \#{gem.source}" if gem.source
+          output << spec
+        end
+        f.write output.join("\\n")
+        puts output.join("\\n")
+      end
+    end
+  end
+  TASK
+end
+
+rakefile "setup_svn.rake" do
   <<-TASK
   desc "Configure Subversion for Rails"
   task :setup_svn do
@@ -76,14 +108,19 @@ rake("gems:install", :sudo => true)
 rake "setup_svn" unless repo_entered.blank?
 
 if app_name
+  run "git init"
+  rake "heroku:gems"
   run "heroku create #{app_name}"
+  run "git add ."
   run "git commit -a -m 'Initial Commit' "
+  run "heroku addons:add cron:daily"
   run "heroku addons:add deployhooks:email \
       recipient=heroku@inspiresynergy.com \
       subject=\"#{app_name} Deployed\" \
       body=\"{{user}} deployed app\""
   run "heroku addons:add piggyback_ssl"
   run "heroku addons:add newrelic:bronze"
+  run "heroku addons:add cron:daily"
   run "git push heroku master"
   run "heroku rake db:migrate"
 end
