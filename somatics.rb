@@ -71,6 +71,11 @@ rakefile "setup_svn.rake" do
       exit(0)
     end
 
+    puts "Add .gitignore"
+    system "echo '.svn' > .gitignore"
+    system "svn add .gitignore"
+    system "svn commit -m 'add .gitignore'"
+    
     puts "Ignoring .git"
     system "svn propset svn:ignore '.git' ."
     
