@@ -15,8 +15,8 @@ plugin 'redmine_filter',
   :git => 'git://github.com/inspiresynergy/redmine_filter.git'
 plugin 'restful_authentication',
   :git => 'git://github.com/technoweenie/restful-authentication.git'
-# plugin 'somatics_generator',
-  # :git => ''
+plugin 'somatics_generator',
+  :git => 'git://github.com/inspiresynergy/somatics_generator.git'
 # theme_support break my rails 2.3.5 
 # http://inspiresynergy.lighthouseapp.com/projects/53315-somatics/tickets/14-theme_support-break-my-rails-235
  # plugin 'theme_support',
