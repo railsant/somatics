@@ -71,6 +71,9 @@ rakefile "setup_svn.rake" do
       exit(0)
     end
 
+    puts "Ignoring .git"
+    system "svn propset svn:ignore '.git' ."
+    
     puts "Removing /log"
     system "svn remove log/*"
     system "svn commit -m 'removing all log files from subversion'"
