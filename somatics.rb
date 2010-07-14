@@ -1,9 +1,8 @@
 # somatics.rb
 
-app_name = ask 'Type your Application Name for the Heroku project, followed by [ENTER]:'
-
-repo_entered = ask 'Type your repository for the project (SVN), followed by [ENTER]:'
-run "svn co #{repo_entered}" unless repo_entered.blank?
+# app_name = ask 'Type your Application Name for the Heroku project, followed by [ENTER]:'
+# 
+# repo_entered = ask 'Type your repository for the project (SVN), followed by [ENTER]:'
 
 plugin 'action_mailer_optional_tls',
   :git => 'git://github.com/collectiveidea/action_mailer_optional_tls.git'
@@ -70,7 +69,13 @@ rakefile "setup_svn.rake" do
       puts 'Please Import your project to svn before executing this task' 
       exit(0)
     end
-
+    
+    system "svn commit -m 'initial commit'"
+    
+    puts "Add .gems"
+    system "svn add .gems"
+    system "svn commit -m 'add .gems'"
+    
     puts "Add .gitignore"
     system "echo '.svn' > .gitignore"
     system "svn add .gitignore"
@@ -111,24 +116,33 @@ rakefile "setup_svn.rake" do
   TASK
 end
 
-rake("gems:install", :sudo => true)
+rake "gems:install", :sudo => true
 
-rake "setup_svn" unless repo_entered.blank?
+generate "admin_controllers"
+generate "admin_scaffold user --authenticated"
 
-if app_name
-  run "git init"
-  rake "heroku:gems"
-  run "heroku create #{app_name}"
-  run "git add ."
-  run "git commit -a -m 'Initial Commit' "
-  run "heroku addons:add cron:daily"
-  run "heroku addons:add deployhooks:email \
-      recipient=heroku@inspiresynergy.com \
-      subject=\"#{app_name} Deployed\" \
-      body=\"{{user}} deployed app\""
-  run "heroku addons:add piggyback_ssl"
-  run "heroku addons:add newrelic:bronze"
-  run "heroku addons:add cron:daily"
-  run "git push heroku master"
-  run "heroku rake db:migrate"
-end
+rake "db:migrate"
+
+# unless app_name.blank?
+#   run "git init"
+#   rake "heroku:gems"
+#   run "heroku create #{app_name}"
+#   run "git add ."
+#   run "git commit -a -m 'Initial Commit' "
+#   run "heroku addons:add cron:daily"
+#   run "heroku addons:add deployhooks:email \
+#       recipient=heroku@inspiresynergy.com \
+#       subject=\"#{app_name} Deployed\" \
+#       body=\"{{user}} deployed app\""
+#   run "heroku addons:add piggyback_ssl"
+#   run "heroku addons:add newrelic:bronze"
+#   run "heroku addons:add cron:daily"
+#   run "git push heroku master"
+#   run "heroku rake db:migrate"
+# end
+# 
+# unless repo_entered.blank?
+#   run "svn co #{repo_entered}"
+#   rake "setup_svn"
+# end
+
