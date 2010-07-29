@@ -119,7 +119,7 @@ end
 rake "gems:install", :sudo => true
 
 generate "admin_controllers"
-generate "admin_scaffold user --authenticated
+generate "admin_scaffold user --authenticated"
 
 rake "db:create"
 rake "db:migrate"
