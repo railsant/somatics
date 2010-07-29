@@ -119,8 +119,9 @@ end
 rake "gems:install", :sudo => true
 
 generate "admin_controllers"
-generate "admin_scaffold user --authenticated login:string email:string name:string password:password password_confirmation:password"
+generate "admin_scaffold user --authenticated
 
+rake "db:create"
 rake "db:migrate"
 
 # unless app_name.blank?
@@ -145,4 +146,3 @@ rake "db:migrate"
 #   run "svn co #{repo_entered}"
 #   rake "setup_svn"
 # end
-
