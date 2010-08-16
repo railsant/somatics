@@ -43,16 +43,6 @@ Start your server with
 
 Open up http://localhost:3000  and login with username ‘admin’ and password ‘password’.
 
-
-=== Generate the Admin Model
-
-The next step is to load default Fat Free CRM settings, such as menu structures,
-default colors, etc. and create the Admin user. This is done by running the
-following rake task:
-
-   $ rake crm:setup
-
-
 === Generate the Admin Model
 
 You can test drive Somatics by generating models. 
