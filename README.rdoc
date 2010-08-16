@@ -1,0 +1,92 @@
+=== Welcome to Somatics
+
+Somatics is next generation open source scaffolding template that kick-starts your next Rails project. 
+Active development has started in July 2010; new features, enhancements, and updates appear
+on daily basis.
+
+Here are the steps to get Somatics up and running on your system.
+
+
+=== System Requirements
+
+* Ruby v1.8.7 or v1.9.2
+* Ruby on Rails v2.3+ 
+* MySQL v4.1.1 or later (v5+ is recommended) or SQLite v3.4 or later
+
+=== Downloads
+
+* Git source code repository: git://github.com/inspiresynergy/somatics.git
+* .zip or .tgz archives: http://github.com/inspiresynergy/somatics/downloads
+
+=== Resources
+
+* Home page: http://www.somaticsapp.com
+* Project page: http://github.com/inspiresynergy/somatics/tree/master
+* Features and bugs: http://somatics.lighthouseapp.com
+* Twitter commit updates: http://twitter.com/somaticsapp
+* Discussion group for developers: http://groups.google.com/group/somaticsapp
+* IRC channel: #somaticsapp on irc.freenode.net
+
+=== Setting Up The Database
+
+
+These 4 simple steps are the essentials to get you smoothly up and running…
+
+Create your own +config+/+database.yml+ (you can copy one of the sample files in there and edit it)
+Open a shell and create your database and setup the prepared defaults by following command 
+
+    $ rake db:create db:migrate 
+
+Start your server with 
+
+    $ ./script/server
+
+Open up http://localhost:3000  and login with username ‘admin’ and password ‘password’.
+
+
+=== Generate the Admin Model
+
+The next step is to load default Fat Free CRM settings, such as menu structures,
+default colors, etc. and create the Admin user. This is done by running the
+following rake task:
+
+   $ rake crm:setup
+
+
+=== Generate the Admin Model
+
+You can test drive Somatics by generating models. 
+
+   $ script/generate admin_scaffold products title:string description:text
+
+Among other things the generator creates admin user records and administration panels. 
+You can log in the admin panel using the default login and password.(+admin+/+password+)
+The admin site is at http://localhost:3000/admin .
+
+=== Deploying The App
+
+TODO
+
+=== For Developers
+
+TODO
+
+=== Features
+
+Somatic is open source software and relies on your contributions to grow!
+
+http://github.com/inspiresynergy/somatics
+GitHub always contains the latest BaseApp code. Fork your own development branch here if you wish to contribute code.
+
+Pull requests should be send to ‘inspiresynergy’ to include them in the main Somatics code base.
+
+http://inspiresynergy.lighthouseapp.com/projects/53315-somatics/overview
+Bug reports and feature requests should be posted in LightHouse.
+
+Bugs always have priority over new features! But, you’re free to help out with whatever you want.
+
+=== Credits
+
+Somatics is developed by Inspire Synergy – Benjamin Wong, Gary Or and a whole bunch of cool contributors.
+
+Somatics is released to the public under the MIT license.
