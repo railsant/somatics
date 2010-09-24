@@ -10,8 +10,8 @@ plugin 'faster_csv',
   :git => 'git://github.com/circle/fastercsv.git'
 plugin 'prawnto',
   :git => 'git://github.com/thorny-sun/prawnto.git'
-plugin 'redmine_filter',
-  :git => 'git://github.com/inspiresynergy/redmine_filter.git'
+plugin 'somatics_filter',
+  :git => 'git://github.com/inspiresynergy/somatics_filter.git'
 plugin 'restful_authentication',
   :git => 'git://github.com/technoweenie/restful-authentication.git'
 plugin 'somatics_generator',
@@ -27,6 +27,8 @@ plugin 'to_xls',
 
 gem 'will_paginate'
 gem 'prawn', :version => '0.6.3'
+gem 'searchlogic'
+gem 'calendar_date_select'
 
 rakefile "heroku.rake" do
   <<-TASK
